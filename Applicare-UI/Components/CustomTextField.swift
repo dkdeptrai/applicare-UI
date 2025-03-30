@@ -13,7 +13,7 @@ struct CustomTextField: View {
   var imageName: String
   var isSecure: Bool = false
   
-  @State private var text: String = ""
+  @Binding var text: String
   @State private var isTextVisible: Bool = false
   
   var body: some View {

@@ -8,9 +8,10 @@ import SwiftUI
 
 struct SocialButton: View {
     var imageName: String
+    var action: () -> Void
     
     var body: some View {
-        Button(action: {}) {
+        Button(action: action) {
             Image(imageName)
                 .resizable()
                 .frame(width: 30, height: 30)
@@ -18,5 +19,13 @@ struct SocialButton: View {
                 .background(Color(.systemGray6))
                 .clipShape(Circle())
         }
+    }
+}
+
+// Provide a default action for preview or when no action is specified
+extension SocialButton {
+    init(imageName: String) {
+        self.imageName = imageName
+        self.action = {}
     }
 }

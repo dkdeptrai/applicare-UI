@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct SignInView: View {
+  @EnvironmentObject var authViewModel: AuthViewModel
+  @State private var email: String = ""
+  @State private var password: String = ""
+  @Binding var showSignUp: Bool
+  
   var body: some View {
     VStack {
       LogoView()
@@ -17,12 +22,27 @@ struct SignInView: View {
         .padding(.top, 20)
       
       VStack(spacing: 16) {
-        CustomTextField(placeholder: "Email", imageName: "envelope")
-        CustomTextField(placeholder: "Password", imageName: "lock", isSecure: true)
+        CustomTextField(placeholder: "Email", imageName: "envelope", isSecure: false, text: $email)
+          .keyboardType(.emailAddress)
+          .autocapitalization(.none)
+          .autocorrectionDisabled(true)
+          .textContentType(.emailAddress)
+        
+        CustomTextField(placeholder: "Password", imageName: "lock", isSecure: true, text: $password)
+          .textContentType(.password)
+          .autocapitalization(.none)
+          .autocorrectionDisabled(true)
+          .disableAutocorrection(true)
       }
       .padding(.horizontal, 32)
       .padding(.top, 20)
       
+      if let errorMessage = authViewModel.errorMessage {
+        Text(errorMessage)
+          .foregroundColor(.red)
+          .font(.caption)
+          .padding(.top, 5)
+      }
       
       HStack {
         Spacer()
@@ -34,18 +54,26 @@ struct SignInView: View {
       }
       .padding(.horizontal, 32)
       
-      Button(action: {}) {
-        Text("Sign In")
-          .font(.headline)
-          .fontWeight(.semibold)
-          .foregroundColor(.white)
-          .frame(maxWidth: .infinity)
-          .padding()
-          .background(Color.blue)
-          .cornerRadius(10)
+      Button(action: {
+        authViewModel.login(email: email, password: password)
+      }) {
+        if authViewModel.isLoading {
+          ProgressView()
+            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+        } else {
+          Text("Sign In")
+            .font(.headline)
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+        }
       }
+      .frame(maxWidth: .infinity)
+      .padding()
+      .background(Color.blue)
+      .cornerRadius(10)
       .padding(.horizontal, 32)
       .padding(.top, 20)
+      .disabled(authViewModel.isLoading)
       
       SocialLoginView()
       
@@ -53,7 +81,9 @@ struct SignInView: View {
       
       HStack {
         Text("Don't have an account?")
-        Button(action: {}) {
+        Button(action: {
+          showSignUp = true
+        }) {
           Text("Sign Up")
             .font(.headline)
             .fontWeight(.semibold)
@@ -67,5 +97,6 @@ struct SignInView: View {
 }
 
 #Preview {
-  SignInView()
+  SignInView(showSignUp: .constant(false))
+    .environmentObject(AuthViewModel())
 }

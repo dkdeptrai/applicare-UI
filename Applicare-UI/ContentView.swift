@@ -16,8 +16,6 @@ struct ContentView: View {
             Group {
                 if authViewModel.isAuthenticated {
                     HomeView()
-                } else if authViewModel.needsEmailVerification {
-                    EmailVerificationView(showSignIn: $showingSignUp)
                 } else if showingSignUp {
                     SignUpView(showSignIn: $showingSignUp)
                 } else {

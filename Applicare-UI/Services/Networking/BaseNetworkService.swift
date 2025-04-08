@@ -81,7 +81,7 @@ class BaseNetworkService: NetworkServiceProtocol {
             
             // For Void responses (no content expected)
             if T.self == Void.self {
-                completion(.success((() as! T)))
+                completion(.success((()) as! T))
                 return
             }
             

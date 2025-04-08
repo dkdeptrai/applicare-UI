@@ -13,8 +13,6 @@ class AuthViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var currentUser: User? = nil
-    @Published var needsEmailVerification: Bool = false
-    @Published var emailForVerification: String = ""
     
     private let authService: AuthNetworkServiceProtocol
     private let userService: UserNetworkServiceProtocol
@@ -36,7 +34,6 @@ class AuthViewModel: ObservableObject {
     func login(email: String, password: String) {
         isLoading = true
         errorMessage = nil
-        needsEmailVerification = false
         
         let loginRequest = LoginRequestDTO(email: email, password: password)
         
@@ -52,14 +49,6 @@ class AuthViewModel: ObservableObject {
                     switch error {
                     case .unauthorized:
                         self?.errorMessage = "Invalid email or password"
-                    case .customError(let message):
-                        if message.contains("email not verified") {
-                            self?.needsEmailVerification = true
-                            self?.emailForVerification = email
-                            self?.errorMessage = "Please verify your email address before logging in"
-                        } else {
-                            self?.errorMessage = message
-                        }
                     case .decodingFailed:
                         self?.errorMessage = "Could not process server response"
                     default:
@@ -82,10 +71,7 @@ class AuthViewModel: ObservableObject {
                 
                 switch result {
                 case .success:
-                    // After successful registration, user needs to verify email
-                    self?.needsEmailVerification = true
-                    self?.emailForVerification = email
-                    self?.errorMessage = "Registration successful! Please check your email to verify your account."
+                    self?.errorMessage = "Registration successful! You can now log in."
                 case .failure(let error):
                     switch error {
                     case .validationError(let message):
@@ -133,70 +119,11 @@ class AuthViewModel: ObservableObject {
                 switch result {
                 case .success(let userDTO):
                     self?.currentUser = User(from: userDTO)
-                    
-                    // Check if email is verified
-                    if let user = self?.currentUser, !user.isEmailVerified {
-                        self?.needsEmailVerification = true
-                        self?.emailForVerification = user.emailAddress
-                    }
                 case .failure:
                     // If we can't fetch user details, log out
                     self?.authService.clearAuthData()
                     self?.isAuthenticated = false
                     self?.currentUser = nil
-                }
-            }
-        }
-    }
-    
-    func verifyEmail(token: String) {
-        isLoading = true
-        errorMessage = nil
-        
-        let verifyRequest = VerifyEmailRequestDTO(token: token)
-        
-        authService.verifyEmail(verifyRequest: verifyRequest) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                switch result {
-                case .success:
-                    self?.needsEmailVerification = false
-                    self?.errorMessage = "Email verified successfully! You can now log in."
-                case .failure(let error):
-                    switch error {
-                    case .validationError(let message):
-                        self?.errorMessage = "Verification link has expired: \(message)"
-                    case .invalidResponse:
-                        self?.errorMessage = "Invalid verification token. Please check your email or request a new link."
-                    default:
-                        self?.errorMessage = "An error occurred during verification. Please try again."
-                    }
-                }
-            }
-        }
-    }
-    
-    func resendVerificationEmail() {
-        guard !emailForVerification.isEmpty else {
-            errorMessage = "No email address available for verification"
-            return
-        }
-        
-        isLoading = true
-        errorMessage = nil
-        
-        let resendRequest = ResendVerificationRequestDTO(email: emailForVerification)
-        
-        authService.resendVerification(resendRequest: resendRequest) { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                
-                switch result {
-                case .success:
-                    self?.errorMessage = "If your email is registered, a verification link has been sent. Please check your inbox."
-                case .failure:
-                    self?.errorMessage = "An error occurred. If your email is registered, please try again later."
                 }
             }
         }

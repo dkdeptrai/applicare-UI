@@ -16,8 +16,6 @@ enum APIEndpoint: APIEndpointProtocol {
     case login
     case logout
     case register
-    case verifyEmail
-    case resendVerification
     
     // User endpoints
     case getCurrentUser
@@ -34,10 +32,6 @@ enum APIEndpoint: APIEndpointProtocol {
             return "\(APIEndpoint.baseURL)/sessions/current"
         case .register:
             return "\(APIEndpoint.baseURL)/users"
-        case .verifyEmail:
-            return "\(APIEndpoint.baseURL)/verify_email"
-        case .resendVerification:
-            return "\(APIEndpoint.baseURL)/resend_verification"
             
         // User endpoints
         case .getCurrentUser:
@@ -56,7 +50,7 @@ enum APIEndpoint: APIEndpointProtocol {
     // Returns the HTTP method for this endpoint
     var httpMethod: String {
         switch self {
-        case .login, .register, .verifyEmail, .resendVerification:
+        case .login, .register:
             return "POST"
         case .logout:
             return "DELETE"
@@ -68,7 +62,7 @@ enum APIEndpoint: APIEndpointProtocol {
     // Indicates if the endpoint requires authentication
     var requiresAuthentication: Bool {
         switch self {
-        case .login, .register, .verifyEmail, .resendVerification:
+        case .login, .register:
             return false
         case .logout, .getCurrentUser, .getUser, .getUsers:
             return true

@@ -24,8 +24,12 @@ struct CustomTextField: View {
       if isSecure {
         if isTextVisible {
           TextField(placeholder, text: $text)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
         } else {
           SecureField(placeholder, text: $text)
+            .textInputAutocapitalization(.never)
+            .autocorrectionDisabled()
         }
         
         Button(action: {
@@ -36,6 +40,8 @@ struct CustomTextField: View {
         }
       } else {
         TextField(placeholder, text: $text)
+          .textInputAutocapitalization(.never)
+          .autocorrectionDisabled()
       }
     }
     .padding()

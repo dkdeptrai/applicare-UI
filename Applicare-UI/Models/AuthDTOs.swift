@@ -15,7 +15,12 @@ struct LoginRequestDTO: Codable {
 
 struct LoginResponseDTO: Codable {
     let token: String
-    let user: UserDTO
+    let user_id: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case token
+        case user_id
+    }
 }
 
 // MARK: - Registration
@@ -51,4 +56,30 @@ struct ResendVerificationRequestDTO: Codable {
 
 struct ResendVerificationResponseDTO: Codable {
     let message: String
+}
+
+// MARK: - User Registration
+struct UserRegistrationDTO: Codable {
+    let user: UserCreateDTO
+    
+    struct UserCreateDTO: Codable {
+        let email_address: String
+        let password: String
+        let password_confirmation: String
+    }
+}
+
+// MARK: - Email Verification
+struct EmailVerificationDTO: Codable {
+    let token: String
+}
+
+// MARK: - Resend Verification
+struct ResendVerificationDTO: Codable {
+    let email: String
+}
+
+// MARK: - Error Response
+struct ErrorResponseDTO: Codable {
+    let error: String
 } 

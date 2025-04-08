@@ -29,13 +29,6 @@ struct HomeView: View {
                         }
                         
                         HStack {
-                            Text("Email Verified:")
-                                .fontWeight(.semibold)
-                            Text(user.isEmailVerified ? "Yes" : "No")
-                                .foregroundColor(user.isEmailVerified ? .green : .red)
-                        }
-                        
-                        HStack {
                             Text("User ID:")
                                 .fontWeight(.semibold)
                             Text("\(user.id)")
@@ -51,22 +44,6 @@ struct HomeView: View {
                     .background(Color(.systemGray6))
                     .cornerRadius(10)
                     .padding(.horizontal)
-                    
-                    if !user.isEmailVerified {
-                        Button(action: {
-                            authViewModel.resendVerificationEmail()
-                        }) {
-                            Text("Verify Email")
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(height: 45)
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .cornerRadius(10)
-                        }
-                        .padding(.horizontal)
-                    }
                 }
                 
                 Spacer()

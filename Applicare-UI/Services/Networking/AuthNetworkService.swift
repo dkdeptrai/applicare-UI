@@ -12,8 +12,6 @@ protocol AuthNetworkServiceProtocol {
     func login(loginRequest: LoginRequestDTO, completion: @escaping (Result<LoginResponseDTO, NetworkError>) -> Void)
     func register(registerRequest: RegisterRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void)
     func logout(completion: @escaping (Result<Void, NetworkError>) -> Void)
-    func verifyEmail(verifyRequest: VerifyEmailRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void)
-    func resendVerification(resendRequest: ResendVerificationRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void)
     
     // Auth state management
     func setAuthData(token: String, userId: Int)
@@ -87,14 +85,19 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
     
     /// Login user
     func login(loginRequest: LoginRequestDTO, completion: @escaping (Result<LoginResponseDTO, NetworkError>) -> Void) {
-        networkService.request(.login, body: loginRequest) { [weak self] (result: Result<LoginResponseDTO, NetworkError>) in
+        networkService.request(APIEndpoint.login, body: loginRequest) { [weak self] (result: Result<LoginResponseDTO, NetworkError>) in
             switch result {
             case .success(let response):
                 self?.setAuthData(token: response.token, userId: response.user_id)
-            case .failure:
-                break
+                completion(result)
+            case .failure(let error):
+                switch error {
+                case .unauthorized:
+                    completion(.failure(.customError(message: "Invalid email or password")))
+                default:
+                    completion(.failure(error))
+                }
             }
-            completion(result)
         }
     }
     
@@ -109,49 +112,16 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
             )
         )
         
-        networkService.request(.register, body: registrationRequest, completion: completion)
+        networkService.request(APIEndpoint.register, body: registrationRequest, completion: completion)
     }
     
     /// Logout user
     func logout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        networkService.request(.logout, body: nil) { [weak self] result in
+        // The API expects a session ID, but we'll use "current" as per the schema
+        networkService.request(APIEndpoint.logout, body: nil) { [weak self] result in
             // Even if the server logout fails, we still clear local auth data
             self?.clearAuthData()
             completion(result)
         }
-    }
-    
-    /// Verify email with token
-    func verifyEmail(verifyRequest: VerifyEmailRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        let verificationRequest = EmailVerificationDTO(token: verifyRequest.token)
-        networkService.request(.verifyEmail, body: verificationRequest, completion: completion)
-    }
-    
-    /// Resend verification email
-    func resendVerification(resendRequest: ResendVerificationRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        let request = ResendVerificationDTO(email: resendRequest.email)
-        networkService.request(.resendVerification, body: request, completion: completion)
-    }
-    
-    // MARK: - Backwards compatibility methods
-    
-    /// Login user - Legacy interface
-    func login(email: String, password: String, completion: @escaping (Result<LoginResponseDTO, NetworkError>) -> Void) {
-        login(loginRequest: LoginRequestDTO(email: email, password: password), completion: completion)
-    }
-    
-    /// Register new user - Legacy interface
-    func register(email: String, password: String, passwordConfirmation: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        register(registerRequest: RegisterRequestDTO(email: email, password: password, passwordConfirmation: passwordConfirmation), completion: completion)
-    }
-    
-    /// Verify email - Legacy interface
-    func verifyEmail(token: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        verifyEmail(verifyRequest: VerifyEmailRequestDTO(token: token), completion: completion)
-    }
-    
-    /// Resend verification - Legacy interface
-    func resendVerification(email: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        resendVerification(resendRequest: ResendVerificationRequestDTO(email: email), completion: completion)
     }
 } 

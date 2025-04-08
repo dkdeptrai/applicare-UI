@@ -29,16 +29,16 @@ class UserNetworkService: UserNetworkServiceProtocol {
     
     /// Get the current authenticated user
     func getCurrentUser(completion: @escaping (Result<UserDTO, NetworkError>) -> Void) {
-        networkService.request(.getCurrentUser, body: nil, completion: completion)
+        networkService.request(APIEndpoint.getCurrentUser, body: nil, completion: completion)
     }
     
     /// Get a specific user by ID
     func getUser(id: Int, completion: @escaping (Result<UserDTO, NetworkError>) -> Void) {
-        networkService.request(.getUser(id: id), body: nil, completion: completion)
+        networkService.request(APIEndpoint.getUser(id: id), body: nil, completion: completion)
     }
     
     /// Get all users
     func getUsers(completion: @escaping (Result<[UserDTO], NetworkError>) -> Void) {
-        networkService.request(.getUsers, body: nil, completion: completion)
+        networkService.request(APIEndpoint.getUsers, body: nil, completion: completion)
     }
 } 

@@ -8,17 +8,25 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @State private var showingSignUp = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            Group {
+                if authViewModel.isAuthenticated {
+                    HomeView()
+                } else if showingSignUp {
+                    SignUpView(showSignIn: $showingSignUp)
+                } else {
+                    SignInView(showSignUp: $showingSignUp)
+                }
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
 }

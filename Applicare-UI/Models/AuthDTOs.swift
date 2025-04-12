@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Login
 struct LoginRequestDTO: Codable {
-    let email: String
+    let email_address: String
     let password: String
 }
 
@@ -25,11 +25,13 @@ struct LoginResponseDTO: Codable {
 
 // MARK: - Registration
 struct RegisterRequestDTO: Codable {
+    let name: String
     let email: String
     let password: String
     let passwordConfirmation: String
     
     enum CodingKeys: String, CodingKey {
+        case name
         case email, password
         case passwordConfirmation = "password_confirmation"
     }
@@ -63,6 +65,7 @@ struct UserRegistrationDTO: Codable {
     let user: UserCreateDTO
     
     struct UserCreateDTO: Codable {
+        let name: String
         let email_address: String
         let password: String
         let password_confirmation: String

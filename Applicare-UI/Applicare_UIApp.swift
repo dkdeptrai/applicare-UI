@@ -15,6 +15,8 @@ struct Applicare_UIApp: App {
         userService: UserNetworkService.shared
     )
     
+    @State private var isOnboardingComplete = OnboardingViewModel.hasCompletedOnboarding()
+    
     init() {
         // Configure general appearance
         configureAppearance()
@@ -25,8 +27,12 @@ struct Applicare_UIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authViewModel)
+            if !isOnboardingComplete {
+                OnboardingView(isOnboardingComplete: $isOnboardingComplete)
+            } else {
+                ContentView()
+                    .environmentObject(authViewModel)
+            }
         }
     }
     

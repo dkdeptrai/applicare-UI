@@ -106,6 +106,7 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         // The API expects a nested user object
         let registrationRequest = UserRegistrationDTO(
             user: UserRegistrationDTO.UserCreateDTO(
+                name: registerRequest.name,
                 email_address: registerRequest.email,
                 password: registerRequest.password,
                 password_confirmation: registerRequest.passwordConfirmation
@@ -117,8 +118,16 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
     
     /// Logout user
     func logout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
-        // The API expects a session ID, but we'll use "current" as per the schema
-        networkService.request(APIEndpoint.logout, body: nil) { [weak self] result in
+        // Get the current user ID
+        guard let userId = getUserId() else {
+            // If no user ID, maybe they are already logged out? Clear local data anyway.
+            clearAuthData()
+            completion(.failure(.customError(message: "User not logged in or ID missing")))
+            return
+        }
+        
+        // Pass the user ID to the logout endpoint
+        networkService.request(APIEndpoint.logout(id: userId), body: nil) { [weak self] result in
             // Even if the server logout fails, we still clear local auth data
             self?.clearAuthData()
             completion(result)

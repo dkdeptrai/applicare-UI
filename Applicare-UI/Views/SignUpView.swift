@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpView: View {
   @EnvironmentObject var authViewModel: AuthViewModel
+  @State private var name: String = ""
   @State private var email: String = ""
   @State private var password: String = ""
   @State private var confirmPassword: String = ""
@@ -24,6 +25,10 @@ struct SignUpView: View {
         .padding(.top, 20)
       
       VStack(spacing: 16) {
+        CustomTextField(placeholder: "Name", imageName: "person", text: $name)
+          .textContentType(.name)
+          .autocapitalization(.words)
+        
         CustomTextField(placeholder: "Email", imageName: "envelope", text: $email)
           .keyboardType(.emailAddress)
           .autocapitalization(.none)
@@ -65,7 +70,7 @@ struct SignUpView: View {
       .padding(.horizontal, 32)
       
       Button(action: {
-        authViewModel.signUp(email: email, password: password, confirmPassword: confirmPassword)
+        authViewModel.signUp(name: name, email: email, password: password, confirmPassword: confirmPassword)
       }) {
         if authViewModel.isLoading {
           ProgressView()
@@ -84,7 +89,7 @@ struct SignUpView: View {
       .cornerRadius(10)
       .padding(.horizontal, 32)
       .padding(.top, 20)
-      .disabled(!agreeToTerms || email.isEmpty || password.isEmpty || confirmPassword.isEmpty || password != confirmPassword || authViewModel.isLoading)
+      .disabled(!agreeToTerms || name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty || password != confirmPassword || authViewModel.isLoading)
       
       SocialLoginView()
       

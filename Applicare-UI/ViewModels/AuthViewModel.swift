@@ -35,14 +35,14 @@ class AuthViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        let loginRequest = LoginRequestDTO(email: email, password: password)
+        let loginRequest = LoginRequestDTO(email_address: email, password: password)
         
         authService.login(loginRequest: loginRequest) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 
                 switch result {
-                case .success(let response):
+                case .success(_):
                     self?.isAuthenticated = true
                     self?.fetchUserDetails()
                 case .failure(let error):
@@ -59,11 +59,11 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func signUp(email: String, password: String, confirmPassword: String) {
+    func signUp(name: String, email: String, password: String, confirmPassword: String) {
         isLoading = true
         errorMessage = nil
         
-        let registerRequest = RegisterRequestDTO(email: email, password: password, passwordConfirmation: confirmPassword)
+        let registerRequest = RegisterRequestDTO(name: name, email: email, password: password, passwordConfirmation: confirmPassword)
         
         authService.register(registerRequest: registerRequest) { [weak self] result in
             DispatchQueue.main.async {

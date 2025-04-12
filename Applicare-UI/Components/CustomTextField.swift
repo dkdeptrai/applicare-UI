@@ -26,7 +26,7 @@ struct CustomTextField: View {
           TextField(placeholder, text: $text)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-        } else {
+        }  else {
           SecureField(placeholder, text: $text)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()

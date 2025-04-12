@@ -14,13 +14,19 @@ enum APIEndpoint: APIEndpointProtocol {
     
     // Auth endpoints
     case login
-    case logout
+    case logout(id: Int)
     case register
     
     // User endpoints
     case getCurrentUser
     case getUser(id: Int)
-    case getUsers
+    
+    // Booking endpoints
+    case getAllBookings
+    case createBooking
+    case getBooking(id: Int)
+    case updateBooking(id: Int)
+    case cancelBooking(id: Int)
     
     // Computed property that returns the full URL string
     var urlString: String {
@@ -28,8 +34,8 @@ enum APIEndpoint: APIEndpointProtocol {
         // Auth endpoints
         case .login:
             return "\(APIEndpoint.baseURL)/sessions"
-        case .logout:
-            return "\(APIEndpoint.baseURL)/sessions/current"
+        case .logout(let id):
+            return "\(APIEndpoint.baseURL)/sessions/\(id)"
         case .register:
             return "\(APIEndpoint.baseURL)/users"
             
@@ -38,24 +44,37 @@ enum APIEndpoint: APIEndpointProtocol {
             if let userId = AuthNetworkService.shared.getUserId() {
                 return "\(APIEndpoint.baseURL)/users/\(userId)"
             } else {
-                return "\(APIEndpoint.baseURL)/users/me"
+                print("Error: Attempted to get current user URL without a user ID.")
+                return "\(APIEndpoint.baseURL)/users/error_no_user_id"
             }
         case .getUser(let id):
             return "\(APIEndpoint.baseURL)/users/\(id)"
-        case .getUsers:
-            return "\(APIEndpoint.baseURL)/users"
+            
+        // Booking endpoints
+        case .getAllBookings:
+            return "\(APIEndpoint.baseURL)/bookings"
+        case .createBooking:
+            return "\(APIEndpoint.baseURL)/bookings"
+        case .getBooking(let id):
+            return "\(APIEndpoint.baseURL)/bookings/\(id)"
+        case .updateBooking(let id):
+            return "\(APIEndpoint.baseURL)/bookings/\(id)"
+        case .cancelBooking(let id):
+            return "\(APIEndpoint.baseURL)/bookings/\(id)"
         }
     }
     
     // Returns the HTTP method for this endpoint
     var httpMethod: String {
         switch self {
-        case .login, .register:
+        case .login, .register, .createBooking:
             return "POST"
-        case .logout:
+        case .logout( _), .cancelBooking( _):
             return "DELETE"
-        case .getCurrentUser, .getUser, .getUsers:
+        case .getCurrentUser, .getUser( _), .getAllBookings, .getBooking( _):
             return "GET"
+        case .updateBooking( _):
+            return "PUT"
         }
     }
     
@@ -64,7 +83,8 @@ enum APIEndpoint: APIEndpointProtocol {
         switch self {
         case .login, .register:
             return false
-        case .logout, .getCurrentUser, .getUser, .getUsers:
+        case .logout( _), .getCurrentUser, .getUser( _),
+             .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _):
             return true
         }
     }

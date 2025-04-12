@@ -1,0 +1,6 @@
+framework module Pods_Applicare_UI_Applicare_UIUITests {
+  umbrella header "Pods-Applicare-UI-Applicare-UIUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

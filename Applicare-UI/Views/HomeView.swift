@@ -7,70 +7,39 @@
 
 import SwiftUI
 
+// Temporary Home View
 struct HomeView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
-    
     var body: some View {
-        NavigationView {
-            VStack(spacing: 20) {
-                Text("Welcome")
+        NavigationView { // Embed in NavigationView to enable navigation
+            VStack {
+                Text("Welcome!")
                     .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                if let user = authViewModel.currentUser {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("You are logged in!")
-                            .font(.headline)
-                        
-                        HStack {
-                            Text("Email:")
-                                .fontWeight(.semibold)
-                            Text(user.emailAddress)
-                        }
-                        
-                        HStack {
-                            Text("User ID:")
-                                .fontWeight(.semibold)
-                            Text("\(user.id)")
-                        }
-                        
-                        HStack {
-                            Text("Account Created:")
-                                .fontWeight(.semibold)
-                            Text(formatDate(user.createdAt))
-                        }
-                    }
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    authViewModel.logout()
-                }) {
-                    Text("Logout")
-                        .font(.headline)
+                    .padding(.bottom, 40)
+
+                // NavigationLink to the NearbyRepairersView
+                NavigationLink(destination: NearbyRepairersView()) {
+                    Text("Find Nearby Repairers")
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .frame(height: 55)
+                        .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.red)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
                         .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 20)
+                .padding(.horizontal, 40)
+
+                Spacer() // Pushes content to the top
             }
-            .navigationBarTitle("Home", displayMode: .large)
+            .navigationTitle("Home") // Optional: Add a title
+            .navigationBarHidden(true) // Hide the navigation bar for this specific view if desired
         }
+        .navigationViewStyle(.stack) // Consistent navigation style
     }
-    
-    private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+}
+
+// MARK: - Preview
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
     }
 } 

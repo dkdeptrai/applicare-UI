@@ -30,7 +30,6 @@
 		D014F2CC2DAA9BD200AA4623 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A12DAA9BD200AA4623 /* LogoView.swift */; };
 		D014F2CD2DAA9BD200AA4623 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A02DAA9BD200AA4623 /* HomeView.swift */; };
 		D014F2CE2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */; };
-		D014F2CF2DAA9BD200AA4623 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28C2DAA9BD200AA4623 /* User.swift */; };
 		D014F2D02DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A72DAA9BD200AA4623 /* Applicare_UIApp.swift */; };
 		D014F2D12DAA9BD200AA4623 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A22DAA9BD200AA4623 /* OnboardingView.swift */; };
 		D014F2D22DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F29B2DAA9BD200AA4623 /* OnboardingViewModel.swift */; };
@@ -56,7 +55,6 @@
 		D014F2EA2DAA9BD200AA4623 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A12DAA9BD200AA4623 /* LogoView.swift */; };
 		D014F2EB2DAA9BD200AA4623 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A02DAA9BD200AA4623 /* HomeView.swift */; };
 		D014F2EC2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */; };
-		D014F2ED2DAA9BD200AA4623 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28C2DAA9BD200AA4623 /* User.swift */; };
 		D014F2EE2DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A72DAA9BD200AA4623 /* Applicare_UIApp.swift */; };
 		D014F2EF2DAA9BD200AA4623 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A22DAA9BD200AA4623 /* OnboardingView.swift */; };
 		D014F2F02DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F29B2DAA9BD200AA4623 /* OnboardingViewModel.swift */; };
@@ -86,7 +84,6 @@
 		D014F30C2DAA9BD200AA4623 /* LogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A12DAA9BD200AA4623 /* LogoView.swift */; };
 		D014F30D2DAA9BD200AA4623 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A02DAA9BD200AA4623 /* HomeView.swift */; };
 		D014F30E2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */; };
-		D014F30F2DAA9BD200AA4623 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F28C2DAA9BD200AA4623 /* User.swift */; };
 		D014F3102DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A72DAA9BD200AA4623 /* Applicare_UIApp.swift */; };
 		D014F3112DAA9BD200AA4623 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F2A22DAA9BD200AA4623 /* OnboardingView.swift */; };
 		D014F3122DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D014F29B2DAA9BD200AA4623 /* OnboardingViewModel.swift */; };
@@ -98,6 +95,23 @@
 		D02B94262DAAA54C00F7F503 /* Repair.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94252DAAA54C00F7F503 /* Repair.json */; };
 		D02B94272DAAA54C00F7F503 /* Plumber.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94242DAAA54C00F7F503 /* Plumber.json */; };
 		D02B94282DAAA54C00F7F503 /* Electrician.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94232DAAA54C00F7F503 /* Electrician.json */; };
+		D0A21B252DAC058700414398 /* NearbyRepairersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B232DAC058700414398 /* NearbyRepairersView.swift */; };
+		D0A21B262DAC058700414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B242DAC058700414398 /* RepairerBookingView.swift */; };
+		D0A21B342DAC072C00414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B332DAC072C00414398 /* RepairerBookingView.swift */; };
+		D0A21B352DAC072C00414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B332DAC072C00414398 /* RepairerBookingView.swift */; };
+		D0A21B362DAC072C00414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B332DAC072C00414398 /* RepairerBookingView.swift */; };
+		D0A21B3B2DAC076900414398 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B372DAC076900414398 /* Booking.swift */; };
+		D0A21B3C2DAC076900414398 /* BookingDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B382DAC076900414398 /* BookingDTOs.swift */; };
+		D0A21B3D2DAC076900414398 /* Repairer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B392DAC076900414398 /* Repairer.swift */; };
+		D0A21B3E2DAC076900414398 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B3A2DAC076900414398 /* User.swift */; };
+		D0A21B3F2DAC076900414398 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B372DAC076900414398 /* Booking.swift */; };
+		D0A21B402DAC076900414398 /* BookingDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B382DAC076900414398 /* BookingDTOs.swift */; };
+		D0A21B412DAC076900414398 /* Repairer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B392DAC076900414398 /* Repairer.swift */; };
+		D0A21B422DAC076900414398 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B3A2DAC076900414398 /* User.swift */; };
+		D0A21B432DAC076900414398 /* Booking.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B372DAC076900414398 /* Booking.swift */; };
+		D0A21B442DAC076900414398 /* BookingDTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B382DAC076900414398 /* BookingDTOs.swift */; };
+		D0A21B452DAC076900414398 /* Repairer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B392DAC076900414398 /* Repairer.swift */; };
+		D0A21B462DAC076900414398 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B3A2DAC076900414398 /* User.swift */; };
 		E7C9471003FCA756DD023A10 /* Pods_Applicare_UI_Applicare_UIUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DFB894723D0D1640BDE6994 /* Pods_Applicare_UI_Applicare_UIUITests.framework */; };
 		EFA0D36DF006082C368FFD6E /* Pods_Applicare_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEB0C3431FE092A8A21409EF /* Pods_Applicare_UITests.framework */; };
 /* End PBXBuildFile section */
@@ -132,7 +146,6 @@
 		D014F2882DAA9BD200AA4623 /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDTOs.swift; sourceTree = "<group>"; };
 		D014F28B2DAA9BD200AA4623 /* OnboardingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingState.swift; sourceTree = "<group>"; };
-		D014F28C2DAA9BD200AA4623 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D014F28D2DAA9BD200AA4623 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		D014F28F2DAA9BD200AA4623 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D014F2912DAA9BD200AA4623 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
@@ -163,6 +176,13 @@
 		D08386622D7D8A0500BDB7FA /* Applicare-UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Applicare-UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D08386722D7D8A0700BDB7FA /* Applicare-UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Applicare-UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D083867C2D7D8A0700BDB7FA /* Applicare-UIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Applicare-UIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0A21B232DAC058700414398 /* NearbyRepairersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NearbyRepairersView.swift; sourceTree = "<group>"; };
+		D0A21B242DAC058700414398 /* RepairerBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerBookingView.swift; sourceTree = "<group>"; };
+		D0A21B332DAC072C00414398 /* RepairerBookingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerBookingView.swift; sourceTree = "<group>"; };
+		D0A21B372DAC076900414398 /* Booking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Booking.swift; sourceTree = "<group>"; };
+		D0A21B382DAC076900414398 /* BookingDTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingDTOs.swift; sourceTree = "<group>"; };
+		D0A21B392DAC076900414398 /* Repairer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repairer.swift; sourceTree = "<group>"; };
+		D0A21B3A2DAC076900414398 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E8F0EC1D3E117F360707912A /* Pods-Applicare-UI-Applicare-UIUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Applicare-UI-Applicare-UIUITests.debug.xcconfig"; path = "Target Support Files/Pods-Applicare-UI-Applicare-UIUITests/Pods-Applicare-UI-Applicare-UIUITests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -218,8 +238,11 @@
 			children = (
 				D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */,
 				D014F28B2DAA9BD200AA4623 /* OnboardingState.swift */,
-				D014F28C2DAA9BD200AA4623 /* User.swift */,
 				D014F28D2DAA9BD200AA4623 /* UserDTO.swift */,
+				D0A21B372DAC076900414398 /* Booking.swift */,
+				D0A21B382DAC076900414398 /* BookingDTOs.swift */,
+				D0A21B392DAC076900414398 /* Repairer.swift */,
+				D0A21B3A2DAC076900414398 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -269,12 +292,15 @@
 			children = (
 				D014F29E2DAA9BD200AA4623 /* AnimatedImageView.swift */,
 				D014F29F2DAA9BD200AA4623 /* CheckboxToggleStyle.swift */,
+				D0A21B332DAC072C00414398 /* RepairerBookingView.swift */,
 				D014F2A02DAA9BD200AA4623 /* HomeView.swift */,
 				D014F2A12DAA9BD200AA4623 /* LogoView.swift */,
 				D014F2A22DAA9BD200AA4623 /* OnboardingView.swift */,
 				D014F2A32DAA9BD200AA4623 /* SignInView.swift */,
 				D014F2A42DAA9BD200AA4623 /* SignUpView.swift */,
 				D014F2A52DAA9BD200AA4623 /* SocialLoginView.swift */,
+				D0A21B232DAC058700414398 /* NearbyRepairersView.swift */,
+				D0A21B242DAC058700414398 /* RepairerBookingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -625,6 +651,10 @@
 			files = (
 				D014F2F72DAA9BD200AA4623 /* SignUpView.swift in Sources */,
 				D014F2F82DAA9BD200AA4623 /* BaseNetworkService.swift in Sources */,
+				D0A21B432DAC076900414398 /* Booking.swift in Sources */,
+				D0A21B442DAC076900414398 /* BookingDTOs.swift in Sources */,
+				D0A21B452DAC076900414398 /* Repairer.swift in Sources */,
+				D0A21B462DAC076900414398 /* User.swift in Sources */,
 				D014F2F92DAA9BD200AA4623 /* SocialButton.swift in Sources */,
 				D014F2FA2DAA9BD200AA4623 /* UserNetworkService.swift in Sources */,
 				D014F2FB2DAA9BD200AA4623 /* CustomTextField.swift in Sources */,
@@ -639,11 +669,13 @@
 				D014F3072DAA9BD200AA4623 /* AuthNetworkService.swift in Sources */,
 				D014F3082DAA9BD200AA4623 /* NetworkServiceProtocol.swift in Sources */,
 				D014F3092DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
+				D0A21B252DAC058700414398 /* NearbyRepairersView.swift in Sources */,
+				D0A21B262DAC058700414398 /* RepairerBookingView.swift in Sources */,
+				D0A21B352DAC072C00414398 /* RepairerBookingView.swift in Sources */,
 				D014F30B2DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F30C2DAA9BD200AA4623 /* LogoView.swift in Sources */,
 				D014F30D2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D014F30E2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
-				D014F30F2DAA9BD200AA4623 /* User.swift in Sources */,
 				D014F3102DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F3112DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D014F3122DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
@@ -668,6 +700,7 @@
 				D014F2C02DAA9BD200AA4623 /* NetworkError.swift in Sources */,
 				D014F2C12DAA9BD200AA4623 /* ContentView.swift in Sources */,
 				D014F2C22DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
+				D0A21B342DAC072C00414398 /* RepairerBookingView.swift in Sources */,
 				D014F2C32DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
 				D014F2C42DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
 				D014F2C52DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
@@ -679,12 +712,15 @@
 				D014F2CC2DAA9BD200AA4623 /* LogoView.swift in Sources */,
 				D014F2CD2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D014F2CE2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
-				D014F2CF2DAA9BD200AA4623 /* User.swift in Sources */,
 				D014F2D02DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2D12DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D014F2D22DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
 				D014F2D32DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
 				D014F2D42DAA9BD200AA4623 /* UserDTO.swift in Sources */,
+				D0A21B3B2DAC076900414398 /* Booking.swift in Sources */,
+				D0A21B3C2DAC076900414398 /* BookingDTOs.swift in Sources */,
+				D0A21B3D2DAC076900414398 /* Repairer.swift in Sources */,
+				D0A21B3E2DAC076900414398 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,6 +737,7 @@
 				D014F2DE2DAA9BD200AA4623 /* NetworkError.swift in Sources */,
 				D014F2DF2DAA9BD200AA4623 /* ContentView.swift in Sources */,
 				D014F2E02DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
+				D0A21B362DAC072C00414398 /* RepairerBookingView.swift in Sources */,
 				D014F2E12DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
 				D014F2E22DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
 				D014F2E32DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
@@ -712,12 +749,15 @@
 				D014F2EA2DAA9BD200AA4623 /* LogoView.swift in Sources */,
 				D014F2EB2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D014F2EC2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
-				D014F2ED2DAA9BD200AA4623 /* User.swift in Sources */,
 				D014F2EE2DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2EF2DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D014F2F02DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
 				D014F2F12DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
 				D014F2F22DAA9BD200AA4623 /* UserDTO.swift in Sources */,
+				D0A21B3F2DAC076900414398 /* Booking.swift in Sources */,
+				D0A21B402DAC076900414398 /* BookingDTOs.swift in Sources */,
+				D0A21B412DAC076900414398 /* Repairer.swift in Sources */,
+				D0A21B422DAC076900414398 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

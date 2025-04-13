@@ -16,6 +16,8 @@ struct Applicare_UIApp: App {
     )
     
     @State private var isOnboardingComplete = OnboardingViewModel.hasCompletedOnboarding()
+    // Add state to manage showing sign up screen
+    @State private var showSignUpScreen = false
     
     init() {
         // Configure general appearance
@@ -27,10 +29,22 @@ struct Applicare_UIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // Temporarily bypass onboarding and content view to show HomeView directly
+            // Use authentication state to determine the root view
+            if authViewModel.isAuthenticated {
+                 HomeView()
+                     .environmentObject(authViewModel)
+             } else {
+                 // Show the existing SignInView if not authenticated
+                 // Pass the binding to the state variable
+                 SignInView(showSignUp: $showSignUpScreen)
+                     .environmentObject(authViewModel)
+             }
+            
+            /* // Temporarily bypass onboarding and content view to show HomeView directly
             HomeView()
                 // Inject authViewModel into the environment for HomeView and its children
                 .environmentObject(authViewModel)
+            */
 
             /* Original logic:
             if !isOnboardingComplete {

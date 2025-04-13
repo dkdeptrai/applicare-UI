@@ -25,9 +25,9 @@ class AuthViewModel: ObservableObject {
         // Check if user is already logged in
         isAuthenticated = authService.isUserLoggedIn()
         
-        // If authenticated, fetch user details
+        // If authenticated, fetch profile data
         if isAuthenticated {
-            fetchUserDetails()
+            fetchProfileData()
         }
     }
     
@@ -44,7 +44,7 @@ class AuthViewModel: ObservableObject {
                 switch result {
                 case .success(_):
                     self?.isAuthenticated = true
-                    self?.fetchUserDetails()
+                    self?.fetchProfileData()
                 case .failure(let error):
                     switch error {
                     case .unauthorized:
@@ -93,34 +93,36 @@ class AuthViewModel: ObservableObject {
         authService.logout { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
-                
+                self?.authService.clearAuthData()
+                self?.isAuthenticated = false
+                self?.currentUser = nil
+
                 switch result {
                 case .success:
-                    self?.isAuthenticated = false
-                    self?.currentUser = nil
-                case .failure:
-                    // Even if server logout fails, we'll still log out locally
-                    self?.authService.clearAuthData()
-                    self?.isAuthenticated = false
-                    self?.currentUser = nil
-                    self?.errorMessage = "Logout failed, but you've been logged out locally"
+                    print("Logout successful")
+                case .failure(let error):
+                    print("Server logout failed: \(error.localizedDescription)")
+                    self?.errorMessage = "Server logout failed, but you are logged out locally."
                 }
             }
         }
     }
     
-    func fetchUserDetails() {
+    func fetchProfileData() {
         isLoading = true
+        errorMessage = nil
         
-        userService.getCurrentUser { [weak self] result in
+        userService.fetchProfile { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
                 
                 switch result {
-                case .success(let userDTO):
-                    self?.currentUser = User(from: userDTO)
-                case .failure:
-                    // If we can't fetch user details, log out
+                case .success(let user):
+                    self?.currentUser = user
+                    print("Successfully fetched profile for user: \(user.name)")
+                case .failure(let error):
+                    print("Failed to fetch profile: \(error.localizedDescription)")
+                    self?.errorMessage = "Could not fetch your profile. Please try logging in again."
                     self?.authService.clearAuthData()
                     self?.isAuthenticated = false
                     self?.currentUser = nil

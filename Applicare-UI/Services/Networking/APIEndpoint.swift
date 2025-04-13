@@ -20,6 +20,7 @@ enum APIEndpoint: APIEndpointProtocol {
     // User endpoints
     case getCurrentUser
     case getUser(id: Int)
+    case getProfile
     
     // Booking endpoints
     case getAllBookings
@@ -27,6 +28,10 @@ enum APIEndpoint: APIEndpointProtocol {
     case getBooking(id: Int)
     case updateBooking(id: Int)
     case cancelBooking(id: Int)
+    
+    // Repairer endpoints
+    case getRepairerCalendar(repairerId: Int, year: Int, month: Int)
+    case getNearbyRepairers(latitude: Double, longitude: Double, radius: Double?)
     
     // Computed property that returns the full URL string
     var urlString: String {
@@ -49,6 +54,8 @@ enum APIEndpoint: APIEndpointProtocol {
             }
         case .getUser(let id):
             return "\(APIEndpoint.baseURL)/users/\(id)"
+        case .getProfile:
+            return "\(APIEndpoint.baseURL)/profile"
             
         // Booking endpoints
         case .getAllBookings:
@@ -61,6 +68,18 @@ enum APIEndpoint: APIEndpointProtocol {
             return "\(APIEndpoint.baseURL)/bookings/\(id)"
         case .cancelBooking(let id):
             return "\(APIEndpoint.baseURL)/bookings/\(id)"
+            
+        // Repairer endpoints
+        case .getRepairerCalendar(let repairerId, let year, let month):
+            return "\(APIEndpoint.baseURL)/repairers/\(repairerId)/calendar/\(year)/\(month)"
+        case .getNearbyRepairers(let latitude, let longitude, let radius):
+            var queryItems = [URLQueryItem(name: "latitude", value: "\(latitude)"), URLQueryItem(name: "longitude", value: "\(longitude)")]
+            if let radius = radius {
+                queryItems.append(URLQueryItem(name: "radius", value: "\(radius)"))
+            }
+            var components = URLComponents(string: "\(APIEndpoint.baseURL)/repairers/nearby")
+            components?.queryItems = queryItems
+            return components?.string ?? ""
         }
     }
     
@@ -75,6 +94,10 @@ enum APIEndpoint: APIEndpointProtocol {
             return "GET"
         case .updateBooking( _):
             return "PUT"
+        case .getProfile:
+            return "GET"
+        case .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
+            return "GET"
         }
     }
     
@@ -84,7 +107,8 @@ enum APIEndpoint: APIEndpointProtocol {
         case .login, .register:
             return false
         case .logout( _), .getCurrentUser, .getUser( _),
-             .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _):
+             .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _),
+             .getProfile, .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
             return true
         }
     }

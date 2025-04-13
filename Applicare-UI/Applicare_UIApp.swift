@@ -29,8 +29,8 @@ struct Applicare_UIApp: App {
         WindowGroup {
             // Temporarily bypass onboarding and content view to show HomeView directly
             HomeView()
-                // Inject authViewModel if HomeView or subsequent views need it
-                // .environmentObject(authViewModel)
+                // Inject authViewModel into the environment for HomeView and its children
+                .environmentObject(authViewModel)
 
             /* Original logic:
             if !isOnboardingComplete {

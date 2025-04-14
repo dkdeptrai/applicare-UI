@@ -70,8 +70,11 @@ class AuthViewModel: ObservableObject {
                 self?.isLoading = false
                 
                 switch result {
-                case .success:
-                    self?.errorMessage = "Registration successful! You can now log in."
+                case .success: 
+                    // Indicate success - maybe clear error? 
+                    // Navigation should perhaps go back to SignIn with a success message
+                    self?.errorMessage = "Registration successful! Please sign in."
+                    print("Sign up successful in ViewModel")
                 case .failure(let error):
                     switch error {
                     case .validationError(let message):

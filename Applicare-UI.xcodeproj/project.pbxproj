@@ -95,6 +95,21 @@
 		D02B94262DAAA54C00F7F503 /* Repair.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94252DAAA54C00F7F503 /* Repair.json */; };
 		D02B94272DAAA54C00F7F503 /* Plumber.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94242DAAA54C00F7F503 /* Plumber.json */; };
 		D02B94282DAAA54C00F7F503 /* Electrician.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94232DAAA54C00F7F503 /* Electrician.json */; };
+		D05BC6852DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
+		D05BC6862DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
+		D05BC6872DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
+		D05BC6892DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
+		D05BC68A2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
+		D05BC68B2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
+		D05BC68D2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
+		D05BC68E2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
+		D05BC68F2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
+		D05BC6922DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
+		D05BC6932DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
+		D05BC6942DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
+		D05BC6962DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */; };
+		D05BC6972DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */; };
+		D05BC6982DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */; };
 		D0A21B252DAC058700414398 /* NearbyRepairersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B232DAC058700414398 /* NearbyRepairersView.swift */; };
 		D0A21B262DAC058700414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B242DAC058700414398 /* RepairerBookingView.swift */; };
 		D0A21B342DAC072C00414398 /* RepairerBookingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A21B332DAC072C00414398 /* RepairerBookingView.swift */; };
@@ -173,6 +188,11 @@
 		D02B94232DAAA54C00F7F503 /* Electrician.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Electrician.json; sourceTree = "<group>"; };
 		D02B94242DAAA54C00F7F503 /* Plumber.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Plumber.json; sourceTree = "<group>"; };
 		D02B94252DAAA54C00F7F503 /* Repair.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Repair.json; sourceTree = "<group>"; };
+		D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteInfoView.swift; sourceTree = "<group>"; };
+		D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
+		D05BC68C2DAD70EE00AB5DB4 /* File.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = File.txt; sourceTree = "<group>"; };
+		D05BC6902DAD711400AB5DB4 /* InfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRow.swift; sourceTree = "<group>"; };
+		D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerProfileView.swift; sourceTree = "<group>"; };
 		D08386622D7D8A0500BDB7FA /* Applicare-UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Applicare-UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D08386722D7D8A0700BDB7FA /* Applicare-UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Applicare-UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D083867C2D7D8A0700BDB7FA /* Applicare-UIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Applicare-UIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -293,14 +313,18 @@
 				D014F29E2DAA9BD200AA4623 /* AnimatedImageView.swift */,
 				D014F29F2DAA9BD200AA4623 /* CheckboxToggleStyle.swift */,
 				D0A21B332DAC072C00414398 /* RepairerBookingView.swift */,
+				D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */,
 				D014F2A02DAA9BD200AA4623 /* HomeView.swift */,
 				D014F2A12DAA9BD200AA4623 /* LogoView.swift */,
 				D014F2A22DAA9BD200AA4623 /* OnboardingView.swift */,
+				D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */,
 				D014F2A32DAA9BD200AA4623 /* SignInView.swift */,
+				D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */,
 				D014F2A42DAA9BD200AA4623 /* SignUpView.swift */,
 				D014F2A52DAA9BD200AA4623 /* SocialLoginView.swift */,
 				D0A21B232DAC058700414398 /* NearbyRepairersView.swift */,
 				D0A21B242DAC058700414398 /* RepairerBookingView.swift */,
+				D05BC6912DAD711400AB5DB4 /* HelperViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -318,6 +342,7 @@
 				D014F2A82DAA9BD200AA4623 /* Assets.xcassets */,
 				D014F2A92DAA9BD200AA4623 /* ContentView.swift */,
 				D02B94292DAAA55600F7F503 /* Animations */,
+				D05BC68C2DAD70EE00AB5DB4 /* File.txt */,
 			);
 			path = "Applicare-UI";
 			sourceTree = "<group>";
@@ -351,6 +376,14 @@
 				D02B94252DAAA54C00F7F503 /* Repair.json */,
 			);
 			path = Animations;
+			sourceTree = "<group>";
+		};
+		D05BC6912DAD711400AB5DB4 /* HelperViews */ = {
+			isa = PBXGroup;
+			children = (
+				D05BC6902DAD711400AB5DB4 /* InfoRow.swift */,
+			);
+			path = HelperViews;
 			sourceTree = "<group>";
 		};
 		D08386592D7D8A0500BDB7FA = {
@@ -507,6 +540,7 @@
 			files = (
 				D02B94262DAAA54C00F7F503 /* Repair.json in Resources */,
 				D02B94272DAAA54C00F7F503 /* Plumber.json in Resources */,
+				D05BC68F2DAD70EE00AB5DB4 /* File.txt in Resources */,
 				D02B94282DAAA54C00F7F503 /* Electrician.json in Resources */,
 				D014F2F52DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2F62DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
@@ -519,6 +553,7 @@
 			files = (
 				D014F2B52DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2B62DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
+				D05BC68D2DAD70EE00AB5DB4 /* File.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -528,6 +563,7 @@
 			files = (
 				D014F2F32DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2F42DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
+				D05BC68E2DAD70EE00AB5DB4 /* File.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -653,6 +689,8 @@
 				D014F2F82DAA9BD200AA4623 /* BaseNetworkService.swift in Sources */,
 				D0A21B432DAC076900414398 /* Booking.swift in Sources */,
 				D0A21B442DAC076900414398 /* BookingDTOs.swift in Sources */,
+				D05BC6972DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */,
+				D05BC68B2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */,
 				D0A21B452DAC076900414398 /* Repairer.swift in Sources */,
 				D0A21B462DAC076900414398 /* User.swift in Sources */,
 				D014F2F92DAA9BD200AA4623 /* SocialButton.swift in Sources */,
@@ -666,6 +704,7 @@
 				D014F3042DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
 				D014F3052DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
 				D014F3062DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
+				D05BC6872DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */,
 				D014F3072DAA9BD200AA4623 /* AuthNetworkService.swift in Sources */,
 				D014F3082DAA9BD200AA4623 /* NetworkServiceProtocol.swift in Sources */,
 				D014F3092DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
@@ -677,6 +716,7 @@
 				D014F30D2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D014F30E2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
 				D014F3102DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
+				D05BC6922DAD711400AB5DB4 /* InfoRow.swift in Sources */,
 				D014F3112DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D014F3122DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
 				D014F3132DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
@@ -699,14 +739,18 @@
 				D014F2BF2DAA9BD200AA4623 /* AnimatedImageView.swift in Sources */,
 				D014F2C02DAA9BD200AA4623 /* NetworkError.swift in Sources */,
 				D014F2C12DAA9BD200AA4623 /* ContentView.swift in Sources */,
+				D05BC6942DAD711400AB5DB4 /* InfoRow.swift in Sources */,
 				D014F2C22DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
 				D0A21B342DAC072C00414398 /* RepairerBookingView.swift in Sources */,
 				D014F2C32DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
+				D05BC6852DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */,
 				D014F2C42DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
+				D05BC6962DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */,
 				D014F2C52DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
 				D014F2C62DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
 				D014F2C72DAA9BD200AA4623 /* AuthNetworkService.swift in Sources */,
 				D014F2C82DAA9BD200AA4623 /* NetworkServiceProtocol.swift in Sources */,
+				D05BC6892DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */,
 				D014F2C92DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2CB2DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2CC2DAA9BD200AA4623 /* LogoView.swift in Sources */,
@@ -736,14 +780,18 @@
 				D014F2DD2DAA9BD200AA4623 /* AnimatedImageView.swift in Sources */,
 				D014F2DE2DAA9BD200AA4623 /* NetworkError.swift in Sources */,
 				D014F2DF2DAA9BD200AA4623 /* ContentView.swift in Sources */,
+				D05BC6932DAD711400AB5DB4 /* InfoRow.swift in Sources */,
 				D014F2E02DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
 				D0A21B362DAC072C00414398 /* RepairerBookingView.swift in Sources */,
 				D014F2E12DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
+				D05BC6862DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */,
 				D014F2E22DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
+				D05BC6982DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */,
 				D014F2E32DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
 				D014F2E42DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
 				D014F2E52DAA9BD200AA4623 /* AuthNetworkService.swift in Sources */,
 				D014F2E62DAA9BD200AA4623 /* NetworkServiceProtocol.swift in Sources */,
+				D05BC68A2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */,
 				D014F2E72DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2E92DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2EA2DAA9BD200AA4623 /* LogoView.swift in Sources */,

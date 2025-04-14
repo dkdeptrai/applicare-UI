@@ -12,14 +12,32 @@ struct HomeView: View {
     // Inject the AuthViewModel
     @EnvironmentObject var authViewModel: AuthViewModel
 
+    // State to control presenting the settings sheet
+    @State private var showSettings = false
+
     var body: some View {
         NavigationView { // Embed in NavigationView to enable navigation
             VStack(alignment: .leading, spacing: 20) { // Align content to leading
+                HStack { // HStack for Welcome message and Settings Button
+                    if let user = authViewModel.currentUser {
+                        Text("Welcome, \(user.name)!")
+                            .font(.largeTitle)
+                    } else {
+                        Text("Welcome!")
+                            .font(.largeTitle)
+                    }
+                    Spacer()
+                    // Settings Button
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .font(.title2)
+                    }
+                }
+
                 if let user = authViewModel.currentUser {
                     // Display User Info if available
-                    Text("Welcome, \(user.name)!")
-                        .font(.largeTitle)
-
                     VStack(alignment: .leading) {
                         Text("Email: \(user.emailAddress)")
                         if let lat = user.latitude, let lon = user.longitude {
@@ -35,9 +53,10 @@ struct HomeView: View {
 
                 } else {
                     // Fallback if user data isn't loaded yet
-                    Text("Welcome!")
-                        .font(.largeTitle)
-                        .padding(.bottom, 40)
+                    Text("Loading user data...")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .padding(.bottom, 20)
                 }
 
                 // NavigationLink to the NearbyRepairersView
@@ -54,18 +73,7 @@ struct HomeView: View {
                 Spacer() // Pushes content to the top
 
                 // Logout Button (Optional but good for testing)
-                 Button(action: {
-                     authViewModel.logout()
-                 }) {
-                     Text("Logout")
-                         .fontWeight(.semibold)
-                         .padding()
-                         .frame(maxWidth: .infinity)
-                         .background(Color.red)
-                         .foregroundColor(.white)
-                         .cornerRadius(10)
-                 }
-                 .padding(.bottom) // Add some padding at the bottom
+                 // Logout button is now inside ProfileSettingsView
             }
             .padding() // Add padding to the VStack content
             .navigationTitle("Home")
@@ -77,6 +85,11 @@ struct HomeView: View {
             if authViewModel.isAuthenticated && authViewModel.currentUser == nil {
                 authViewModel.fetchProfileData()
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            // Present ProfileSettingsView modally
+            ProfileSettingsView()
+                .environmentObject(authViewModel)
         }
     }
 }

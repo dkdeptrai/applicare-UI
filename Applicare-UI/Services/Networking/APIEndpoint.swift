@@ -86,19 +86,25 @@ enum APIEndpoint: APIEndpointProtocol {
     // Returns the HTTP method for this endpoint
     var httpMethod: String {
         switch self {
+        // POST Methods
         case .login, .register, .createBooking:
             return "POST"
-        case .logout( _), .cancelBooking( _):
+            
+        // DELETE Methods
+        case .logout, .cancelBooking:
             return "DELETE"
-        case .getCurrentUser, .getUser( _), .getAllBookings, .getBooking( _):
-            return "GET"
-        case .updateBooking( _):
+            
+        // PUT Methods
+        case .updateBooking:
             return "PUT"
-        case .getProfile:
-            return "GET"
-        case .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
+            
+        // GET Methods
+        case .getCurrentUser, .getUser, .getProfile, 
+             .getAllBookings, .getBooking, 
+             .getRepairerCalendar, .getNearbyRepairers:
             return "GET"
         }
+        // No default needed as all cases should be covered
     }
     
     // Indicates if the endpoint requires authentication
@@ -108,9 +114,11 @@ enum APIEndpoint: APIEndpointProtocol {
             return false
         case .logout( _), .getCurrentUser, .getUser( _),
              .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _),
-             .getProfile, .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
+             .getProfile,
+             .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
             return true
         }
+        // No default needed as all cases are now covered
     }
     
     // Returns a URL from the endpoint's URL string

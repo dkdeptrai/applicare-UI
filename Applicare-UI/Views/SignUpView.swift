@@ -52,7 +52,7 @@ struct SignUpView: View {
       
       if let errorMessage = authViewModel.errorMessage {
         Text(errorMessage)
-          .foregroundColor(.red)
+          .foregroundColor(errorMessage == "Registration successful! Please sign in." ? .green : .red)
           .font(.caption)
           .padding(.top, 5)
       }
@@ -69,9 +69,7 @@ struct SignUpView: View {
       }
       .padding(.horizontal, 32)
       
-      Button(action: {
-        authViewModel.signUp(name: name, email: email, password: password, confirmPassword: confirmPassword)
-      }) {
+      Button(action: performSignUp) {
         if authViewModel.isLoading {
           ProgressView()
             .progressViewStyle(CircularProgressViewStyle(tint: .white))
@@ -98,7 +96,8 @@ struct SignUpView: View {
       HStack {
         Text("Already have an account?")
         Button(action: {
-          showSignIn = false
+          authViewModel.errorMessage = nil
+          showSignIn = true
         }) {
           Text("Sign in")
             .fontWeight(.semibold)
@@ -108,6 +107,20 @@ struct SignUpView: View {
       .font(.footnote)
       .padding(.bottom, 20)
     }
+  }
+  
+  func performSignUp() {
+    // Basic validation
+    guard !name.isEmpty, !email.isEmpty, !password.isEmpty else {
+      authViewModel.errorMessage = "Please fill in all required fields."
+      return
+    }
+    guard password == confirmPassword else {
+      authViewModel.errorMessage = "Passwords do not match."
+      return
+    }
+    
+    authViewModel.signUp(name: name, email: email, password: password, confirmPassword: confirmPassword)
   }
 }
 

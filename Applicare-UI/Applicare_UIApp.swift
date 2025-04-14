@@ -29,14 +29,13 @@ struct Applicare_UIApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // Use authentication state to determine the root view
+            // Use a container view to manage Auth state and Sign In/Sign Up toggle
             if authViewModel.isAuthenticated {
                  HomeView()
                      .environmentObject(authViewModel)
              } else {
-                 // Show the existing SignInView if not authenticated
-                 // Pass the binding to the state variable
-                 SignInView(showSignUp: $showSignUpScreen)
+                 // Container for Sign In / Sign Up flow
+                 AuthContainerView(showSignUpScreen: $showSignUpScreen)
                      .environmentObject(authViewModel)
              }
             
@@ -67,5 +66,21 @@ struct Applicare_UIApp: App {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+}
+
+// New Container View to handle showing SignIn or SignUp
+struct AuthContainerView: View {
+    @Binding var showSignUpScreen: Bool
+    
+    var body: some View {
+        NavigationView { // Add NavigationView here to allow potential navigation within auth flow
+             if showSignUpScreen {
+                 SignUpView(showSignIn: $showSignUpScreen) // Pass binding to toggle back
+             } else {
+                 SignInView(showSignUp: $showSignUpScreen) // Pass binding to toggle
+             }
+        }
+        .navigationViewStyle(.stack) // Use stack style
     }
 }

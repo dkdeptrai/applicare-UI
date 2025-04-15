@@ -21,6 +21,7 @@ enum APIEndpoint: APIEndpointProtocol {
     case getCurrentUser
     case getUser(id: Int)
     case getProfile
+    case updateProfile
     
     // Booking endpoints
     case getAllBookings
@@ -55,6 +56,8 @@ enum APIEndpoint: APIEndpointProtocol {
         case .getUser(let id):
             return "\(APIEndpoint.baseURL)/users/\(id)"
         case .getProfile:
+            return "\(APIEndpoint.baseURL)/profile"
+        case .updateProfile:
             return "\(APIEndpoint.baseURL)/profile"
             
         // Booking endpoints
@@ -95,7 +98,7 @@ enum APIEndpoint: APIEndpointProtocol {
             return "DELETE"
             
         // PUT Methods
-        case .updateBooking:
+        case .updateBooking, .updateProfile:
             return "PUT"
             
         // GET Methods
@@ -114,7 +117,7 @@ enum APIEndpoint: APIEndpointProtocol {
             return false
         case .logout( _), .getCurrentUser, .getUser( _),
              .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _),
-             .getProfile,
+             .getProfile, .updateProfile,
              .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
             return true
         }

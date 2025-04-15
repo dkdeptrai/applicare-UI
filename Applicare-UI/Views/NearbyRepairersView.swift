@@ -7,30 +7,27 @@ struct NearbyRepairersView: View {
     @State private var selectedRepairer: Repairer? = nil // State to track navigation
 
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(repairers) { repairer in
-                    // Use ZStack to layer NavigationLink behind the row content
-                    ZStack {
-                        // The actual row content
-                        RepairerRow(repairer: repairer)
+        List {
+            ForEach(repairers) { repairer in
+                // Use ZStack to layer NavigationLink behind the row content
+                ZStack {
+                    // The actual row content
+                    RepairerRow(repairer: repairer)
 
-                        // Invisible NavigationLink covering the ZStack
-                        NavigationLink(destination: RepairerBookingView(repairer: repairer)) {
-                            EmptyView() // Content is provided by RepairerRow
-                        }
-                        .opacity(0) // Make the link invisible
+                    // Invisible NavigationLink covering the ZStack
+                    NavigationLink(destination: RepairerBookingView(repairer: repairer)) {
+                        EmptyView() // Content is provided by RepairerRow
                     }
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    .listRowBackground(Color.clear)
+                    .opacity(0) // Make the link invisible
                 }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                .listRowBackground(Color.clear)
             }
-            .listStyle(.plain)
-            .navigationTitle("Repairers")
-            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(.stack)
+        .listStyle(.plain)
+        .navigationTitle("Repairers")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

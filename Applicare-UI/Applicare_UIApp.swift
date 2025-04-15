@@ -15,7 +15,6 @@ struct Applicare_UIApp: App {
         userService: UserNetworkService.shared
     )
     
-    @State private var isOnboardingComplete = OnboardingViewModel.hasCompletedOnboarding()
     // Add state to manage showing sign up screen
     @State private var showSignUpScreen = false
     
@@ -31,28 +30,20 @@ struct Applicare_UIApp: App {
         WindowGroup {
             // Use a container view to manage Auth state and Sign In/Sign Up toggle
             if authViewModel.isAuthenticated {
-                 HomeView()
-                     .environmentObject(authViewModel)
+                 // Show OnboardingView if user needs to complete onboarding
+                 if authViewModel.needsOnboarding {
+                     OnboardingView()
+                         .environmentObject(authViewModel)
+                 } else {
+                     // Otherwise show the main Home view
+                     HomeView()
+                         .environmentObject(authViewModel)
+                 }
              } else {
                  // Container for Sign In / Sign Up flow
                  AuthContainerView(showSignUpScreen: $showSignUpScreen)
                      .environmentObject(authViewModel)
              }
-            
-            /* // Temporarily bypass onboarding and content view to show HomeView directly
-            HomeView()
-                // Inject authViewModel into the environment for HomeView and its children
-                .environmentObject(authViewModel)
-            */
-
-            /* Original logic:
-            if !isOnboardingComplete {
-                OnboardingView(isOnboardingComplete: $isOnboardingComplete)
-            } else {
-                ContentView()
-                    .environmentObject(authViewModel)
-            }
-             */
         }
     }
     

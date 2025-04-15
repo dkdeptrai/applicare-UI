@@ -13,6 +13,7 @@ class AuthViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var currentUser: User? = nil
+    @Published var needsOnboarding: Bool = false
     
     private let authService: AuthNetworkServiceProtocol
     private let userService: UserNetworkServiceProtocol
@@ -63,7 +64,7 @@ class AuthViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
-        let registerRequest = RegisterRequestDTO(name: name, email: email, password: password, passwordConfirmation: confirmPassword)
+        let registerRequest = RegisterRequestDTO(name: name, email_address: email, password: password, passwordConfirmation: confirmPassword)
         
         authService.register(registerRequest: registerRequest) { [weak self] result in
             DispatchQueue.main.async {
@@ -122,13 +123,37 @@ class AuthViewModel: ObservableObject {
                 switch result {
                 case .success(let user):
                     self?.currentUser = user
-                    print("Successfully fetched profile for user: \(user.name)")
+                    self?.needsOnboarding = !user.onboarded
+                    print("Successfully fetched profile for user: \(user.name), onboarded: \(user.onboarded)")
                 case .failure(let error):
                     print("Failed to fetch profile: \(error.localizedDescription)")
                     self?.errorMessage = "Could not fetch your profile. Please try logging in again."
                     self?.authService.clearAuthData()
                     self?.isAuthenticated = false
                     self?.currentUser = nil
+                }
+            }
+        }
+    }
+    
+    func updateProfile(name: String, dateOfBirth: String, mobileNumber: String, address: String, completion: @escaping (Bool, String?) -> Void) {
+        isLoading = true
+        errorMessage = nil
+        
+        userService.updateProfile(name: name, dateOfBirth: dateOfBirth, mobileNumber: mobileNumber, address: address) { [weak self] result in
+            DispatchQueue.main.async {
+                self?.isLoading = false
+                
+                switch result {
+                case .success(let updatedUser):
+                    self?.currentUser = updatedUser
+                    self?.needsOnboarding = !updatedUser.onboarded
+                    completion(true, nil)
+                    print("Successfully updated profile for user: \(updatedUser.name)")
+                case .failure(let error):
+                    print("Failed to update profile: \(error.localizedDescription)")
+                    self?.errorMessage = "Could not update your profile."
+                    completion(false, error.localizedDescription)
                 }
             }
         }

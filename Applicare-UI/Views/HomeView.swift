@@ -27,9 +27,20 @@ struct HomeView: View {
                             .font(.largeTitle)
                     }
                     Spacer()
-                    // Settings Button
-                    Button {
-                        showSettings = true
+                    // Settings Menu
+                    Menu {
+                        Button(action: {
+                            showSettings = true
+                        }) {
+                            Label("Edit Profile", systemImage: "person.crop.circle")
+                        }
+                        
+                        Button(action: {
+                            authViewModel.logout()
+                        }) {
+                            Label("Logout", systemImage: "arrow.right.square")
+                                .foregroundColor(.red)
+                        }
                     } label: {
                         Image(systemName: "gearshape.fill")
                             .font(.title2)
@@ -100,7 +111,19 @@ struct HomeView_Previews: PreviewProvider {
         // Provide a dummy AuthViewModel for the preview
         let previewAuthViewModel = AuthViewModel()
         // Optionally set a dummy user for previewing the logged-in state
-        previewAuthViewModel.currentUser = User(id: 1, name: "Preview User", emailAddress: "preview@example.com", address: "123 Preview St", latitude: 10.0, longitude: 106.0, createdAt: "", updatedAt: "")
+        previewAuthViewModel.currentUser = User(
+            id: 1, 
+            name: "Preview User", 
+            emailAddress: "preview@example.com", 
+            address: "123 Preview St", 
+            latitude: 10.0, 
+            longitude: 106.0, 
+            dateOfBirth: "1990-01-01",
+            mobileNumber: "+1234567890",
+            onboarded: true,
+            createdAt: "", 
+            updatedAt: ""
+        )
         previewAuthViewModel.isAuthenticated = true
 
         return HomeView()

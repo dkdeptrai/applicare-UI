@@ -12,7 +12,7 @@ protocol UserNetworkServiceProtocol {
     // func getCurrentUser(completion: @escaping (Result<UserDTO, NetworkError>) -> Void) // Deprecate or remove if profile replaces it
     func getUser(id: Int, completion: @escaping (Result<User, NetworkError>) -> Void) // Changed DTO to User
     func fetchProfile(completion: @escaping (Result<User, NetworkError>) -> Void) // Added
-    // func updateProfile(userInfo: UpdateProfileDTO, completion: @escaping (Result<User, NetworkError>) -> Void) // REMOVED
+    func updateProfile(name: String, dateOfBirth: String, mobileNumber: String, address: String, completion: @escaping (Result<User, NetworkError>) -> Void) // Added
 }
 
 /// Service implementation for user-related API calls
@@ -44,10 +44,18 @@ class UserNetworkService: UserNetworkServiceProtocol {
         networkService.request(APIEndpoint.getUser(id: id), body: nil, completion: completion)
     }
     
-    // Removed implementation for updating profile
-    /*
-    func updateProfile(userInfo: UpdateProfileDTO, completion: @escaping (Result<User, NetworkError>) -> Void) {
-        networkService.request(APIEndpoint.updateProfile, body: userInfo, completion: completion)
+    /// Update the profile of the currently authenticated user
+    func updateProfile(name: String, dateOfBirth: String, mobileNumber: String, address: String, completion: @escaping (Result<User, NetworkError>) -> Void) {
+        // Create profile update payload
+        let updateData = [
+            "user": [
+                "name": name,
+                "date_of_birth": dateOfBirth,
+                "mobile_number": mobileNumber,
+                "address": address
+            ]
+        ]
+        
+        networkService.request(APIEndpoint.updateProfile, body: updateData, completion: completion)
     }
-    */
 } 

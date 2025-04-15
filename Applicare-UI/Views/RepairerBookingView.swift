@@ -6,22 +6,15 @@ struct RepairerBookingView: View {
     @State private var selectedPlace: String
     @State private var currentMonth: Date
 
-    let repairerId: Int
-    let repairerName: String
-    let repairerTitle: String
-    let repairerAddress: String
-
+    let repairer: Repairer
+    
     let availability: [Int: Int]
 
     let timeSlots = ["7:00 AM", "7:30 AM", "8:00 AM", "9:00 AM", "9:30 AM", "10:00 AM"]
     let placeOptions = ["At home", "Repair Shop"]
 
     init(repairer: Repairer) {
-        self.repairerId = repairer.id
-        self.repairerName = repairer.name
-        self.repairerTitle = repairer.title
-        self.repairerAddress = "123 Main St, Anytown" // Placeholder
-
+        self.repairer = repairer
         _selectedDate = State(initialValue: nil)
         _selectedTime = State(initialValue: nil)
         _selectedPlace = State(initialValue: placeOptions[0])
@@ -35,109 +28,101 @@ struct RepairerBookingView: View {
     }
 
     var body: some View {
-        NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    RepairerInfoView(
-                        name: repairerName,
-                        title: repairerTitle,
-                        address: repairerAddress
-                    )
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                RepairerInfoView(repairer: repairer)
 
-                    CalendarView(
-                        currentMonth: $currentMonth,
-                        selectedDate: $selectedDate,
-                        availability: availability
-                    )
+                CalendarView(
+                    currentMonth: $currentMonth,
+                    selectedDate: $selectedDate,
+                    availability: availability
+                )
 
-                    TimeSelectionView(
-                        selectedTime: $selectedTime,
-                        timeSlots: timeSlots
-                    )
+                TimeSelectionView(
+                    selectedTime: $selectedTime,
+                    timeSlots: timeSlots
+                )
 
-                    PlaceSelectionView(
-                        selectedPlace: $selectedPlace,
-                        placeOptions: placeOptions
-                    )
+                PlaceSelectionView(
+                    selectedPlace: $selectedPlace,
+                    placeOptions: placeOptions
+                )
 
-                    Spacer()
+                Spacer()
 
-
-                }
-                .padding()
             }
-            .navigationTitle("Booking")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(trailing: Button(action: {
-                // Handle share action
-            }) {
-                Image(systemName: "square.and.arrow.up")
-                    .foregroundColor(.primary)
-            })
-            .safeAreaInset(edge: .bottom) {
-                 Button(action: {
-                     print("Booking details for Repairer ID: \(repairerId)")
-                     print("Date: \(selectedDate?.formatted(date: .long, time: .omitted) ?? "Not selected")")
-                     print("Time: \(selectedTime ?? "Not selected")")
-                     print("Place: \(selectedPlace)")
-                 }) {
-                     Text("Book")
-                         .fontWeight(.semibold)
-                         .frame(maxWidth: .infinity)
-                         .padding()
-                         .background(Color.blue)
-                         .foregroundColor(.white)
-                         .cornerRadius(10)
-                 }
-                 .padding(.horizontal)
-                 .padding(.bottom)
-                 .background(.thinMaterial)
-            }
+            .padding()
         }
-        .navigationViewStyle(.stack)
+        .navigationTitle("Booking")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarItems(trailing: Button(action: {
+            // Handle share action
+        }) {
+            Image(systemName: "square.and.arrow.up")
+                .foregroundColor(.primary)
+        })
+        .safeAreaInset(edge: .bottom) {
+             Button(action: {
+                 print("Booking details for Repairer ID: \(repairer.id)")
+                 print("Date: \(selectedDate?.formatted(date: .long, time: .omitted) ?? "Not selected")")
+                 print("Time: \(selectedTime ?? "Not selected")")
+                 print("Place: \(selectedPlace)")
+             }) {
+                 Text("Book")
+                     .fontWeight(.semibold)
+                     .frame(maxWidth: .infinity)
+                     .padding()
+                     .background(Color.blue)
+                     .foregroundColor(.white)
+                     .cornerRadius(10)
+             }
+             .padding(.horizontal)
+             .padding(.bottom)
+             .background(.thinMaterial)
+        }
     }
 }
 
 struct RepairerInfoView: View {
-    let name: String
-    let title: String
-    let address: String
-
+    let repairer: Repairer
+    
     var body: some View {
-        HStack(spacing: 15) {
-            Circle()
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 80, height: 80)
-                .overlay(Image(systemName: "person.fill").resizable().scaledToFit().scaleEffect(0.5).foregroundColor(.gray))
+        NavigationLink(destination: RepairerProfileView(repairer: repairer)) {
+            HStack(spacing: 15) {
+                Circle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(width: 80, height: 80)
+                    .overlay(Image(systemName: "person.fill").resizable().scaledToFit().scaleEffect(0.5).foregroundColor(.gray))
 
-
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(name)
-                        .font(.title2)
-                        .fontWeight(.bold)
-                    Spacer()
-                    Text("Professional")
-                        .font(.caption)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundColor(.blue)
-                        .cornerRadius(10)
-                }
-                Text(title)
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                HStack {
-                    Image(systemName: "location.fill")
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text(repairer.name)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                        Spacer()
+                        Text("Professional")
+                            .font(.caption)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(10)
+                    }
+                    Text(repairer.title)
+                        .font(.subheadline)
                         .foregroundColor(.gray)
-                        .font(.caption)
-                    Text(address)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                    HStack {
+                        Image(systemName: "location.fill")
+                            .foregroundColor(.gray)
+                            .font(.caption)
+                        Text("123 Main St, Anytown") // Placeholder address
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.top, 2)
                 }
-                .padding(.top, 2)
             }
+            .foregroundColor(.primary)
         }
     }
 }

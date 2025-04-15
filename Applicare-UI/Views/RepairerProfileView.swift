@@ -41,8 +41,11 @@ let mockReviews: [TempReview] = [
 // MARK: - Repairer Profile View
 
 struct RepairerProfileView: View {
+    // Parameter to pass in the specific repairer
+    var repairer: Repairer
+    
     // In a real app, you'd fetch the full Repairer details by ID
-    let repairerBase = mockRepairerBase // Use the base info from the actual model
+    var repairerBase: Repairer { repairer }
     // Use temporary mock data for detailed fields
     let aboutMe = mockAboutMe
     let workingHours = mockWorkingHours
@@ -51,56 +54,56 @@ struct RepairerProfileView: View {
 
     // Environment variable to dismiss the view (if presented modally or in NavigationStack)
     @Environment(\.dismiss) var dismiss
+    
+    // Add initializer with default value
+    init(repairer: Repairer = mockRepairerBase) {
+        self.repairer = repairer
+    }
 
     var body: some View {
-        NavigationView { // Added NavigationView for title and potential back button integration
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    // Header Section
-                    HeaderView(repairer: repairerBase) // Pass the base Repairer object
+        // Remove the NavigationView wrapper
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                // Header Section
+                HeaderView(repairer: repairerBase) // Pass the base Repairer object
 
-                    // Stats Section
-                    StatsView(repairer: repairerBase, reviewCount: reviews.count) // Pass base Repairer and review count
+                // Stats Section
+                StatsView(repairer: repairerBase, reviewCount: reviews.count) // Pass base Repairer and review count
 
-                    // About Me Section
-                    AboutMeView(aboutText: aboutMe) // Pass temporary mock data
+                // About Me Section
+                AboutMeView(aboutText: aboutMe) // Pass temporary mock data
 
-                    // Working Hours Section
-                    WorkingHoursView(hours: workingHours) // Pass temporary mock data
+                // Working Hours Section
+                WorkingHoursView(hours: workingHours) // Pass temporary mock data
 
-                    // Images Section
-                    ImagesView(imageNames: images) // Pass temporary mock data
+                // Images Section
+                ImagesView(imageNames: images) // Pass temporary mock data
 
-                    // Reviews Section
-                    ReviewsView(reviews: reviews) // Pass temporary mock data
+                // Reviews Section
+                ReviewsView(reviews: reviews) // Pass temporary mock data
 
-                    Spacer() // Push content up
-                }
-                .padding(.horizontal) // Add horizontal padding to the main VStack
+                Spacer() // Push content up
             }
-            // Use .inline for smaller title, .large for larger default title
-            .navigationTitle("Repairer details")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarItems(
-                leading: Button {
-                    dismiss() // Action for back button
-                } label: {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.primary) // Use primary color for adaptability
-                },
-                trailing: Button {
+            .padding(.horizontal) // Add horizontal padding to the main VStack
+        }
+        // Navigation bar configuration stays
+        .navigationTitle("Repairer details")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
                     // Action for share button
                     print("Share tapped")
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                         .foregroundColor(.primary)
                 }
-            )
-             // Bottom Buttons - overlay or place outside ScrollView depending on desired behavior
-             .safeAreaInset(edge: .bottom) {
-                 BottomButtonsView()
-                     .background(.thinMaterial) // Add background for visibility
-             }
+            }
+        }
+        // Bottom Buttons - overlay or place outside ScrollView depending on desired behavior
+        .safeAreaInset(edge: .bottom) {
+            BottomButtonsView()
+                .background(.thinMaterial) // Add background for visibility
         }
         // Use .navigationViewStyle(.stack) if needed for specific navigation behavior
     }

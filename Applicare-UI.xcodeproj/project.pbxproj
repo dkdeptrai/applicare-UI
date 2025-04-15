@@ -101,9 +101,6 @@
 		D05BC6892DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
 		D05BC68A2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
 		D05BC68B2DAD6CD500AB5DB4 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */; };
-		D05BC68D2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
-		D05BC68E2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
-		D05BC68F2DAD70EE00AB5DB4 /* File.txt in Resources */ = {isa = PBXBuildFile; fileRef = D05BC68C2DAD70EE00AB5DB4 /* File.txt */; };
 		D05BC6922DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
 		D05BC6932DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
 		D05BC6942DAD711400AB5DB4 /* InfoRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6902DAD711400AB5DB4 /* InfoRow.swift */; };
@@ -190,7 +187,6 @@
 		D02B94252DAAA54C00F7F503 /* Repair.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Repair.json; sourceTree = "<group>"; };
 		D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteInfoView.swift; sourceTree = "<group>"; };
 		D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
-		D05BC68C2DAD70EE00AB5DB4 /* File.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = File.txt; sourceTree = "<group>"; };
 		D05BC6902DAD711400AB5DB4 /* InfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRow.swift; sourceTree = "<group>"; };
 		D05BC6952DAD773A00AB5DB4 /* RepairerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerProfileView.swift; sourceTree = "<group>"; };
 		D08386622D7D8A0500BDB7FA /* Applicare-UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Applicare-UI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -342,7 +338,6 @@
 				D014F2A82DAA9BD200AA4623 /* Assets.xcassets */,
 				D014F2A92DAA9BD200AA4623 /* ContentView.swift */,
 				D02B94292DAAA55600F7F503 /* Animations */,
-				D05BC68C2DAD70EE00AB5DB4 /* File.txt */,
 			);
 			path = "Applicare-UI";
 			sourceTree = "<group>";
@@ -540,7 +535,6 @@
 			files = (
 				D02B94262DAAA54C00F7F503 /* Repair.json in Resources */,
 				D02B94272DAAA54C00F7F503 /* Plumber.json in Resources */,
-				D05BC68F2DAD70EE00AB5DB4 /* File.txt in Resources */,
 				D02B94282DAAA54C00F7F503 /* Electrician.json in Resources */,
 				D014F2F52DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2F62DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
@@ -553,7 +547,6 @@
 			files = (
 				D014F2B52DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2B62DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
-				D05BC68D2DAD70EE00AB5DB4 /* File.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,7 +556,6 @@
 			files = (
 				D014F2F32DAA9BD200AA4623 /* Assets.xcassets in Resources */,
 				D014F2F42DAA9BD200AA4623 /* Preview Assets.xcassets in Resources */,
-				D05BC68E2DAD70EE00AB5DB4 /* File.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

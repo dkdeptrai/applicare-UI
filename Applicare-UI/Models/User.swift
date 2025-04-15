@@ -16,6 +16,9 @@ struct User: Codable, Identifiable {
     let address: String? // Added (marked optional as it can be empty)
     let latitude: Double? // Added (marked optional)
     let longitude: Double? // Added (marked optional)
+    let dateOfBirth: String? // Added from swagger (marked optional)
+    let mobileNumber: String? // Added from swagger (marked optional)
+    let onboarded: Bool // Added from swagger
     let createdAt: String // Keep as String for direct decoding
     let updatedAt: String // Keep as String for direct decoding
 
@@ -27,6 +30,9 @@ struct User: Codable, Identifiable {
         case address
         case latitude
         case longitude
+        case dateOfBirth = "date_of_birth"
+        case mobileNumber = "mobile_number"
+        case onboarded
         case createdAt = "created_at"
         case updatedAt = "updated_at"
     }

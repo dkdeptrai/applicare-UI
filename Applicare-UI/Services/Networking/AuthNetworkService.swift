@@ -107,7 +107,7 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         let registrationRequest = UserRegistrationDTO(
             user: UserRegistrationDTO.UserCreateDTO(
                 name: registerRequest.name,
-                email_address: registerRequest.email,
+                email_address: registerRequest.email_address,
                 password: registerRequest.password,
                 password_confirmation: registerRequest.passwordConfirmation
             )

@@ -11,9 +11,9 @@ struct CompleteInfoView: View {
     @State private var phoneNumber: String = ""
     @State private var address: String = ""
     
-    // TODO: Re-add isLoading/errorMessage when save is possible
-    // @State private var isLoading: Bool = false
-    // @State private var errorMessage: String? = nil
+    // Re-add state variables for loading and error message
+    @State private var isLoading: Bool = false
+    @State private var errorMessage: String? = nil
     
     // Flag to indicate if data is loaded for editing
     @State private var didLoadData = false
@@ -62,19 +62,34 @@ struct CompleteInfoView: View {
                 FormField(title: "Phone Number", placeholder: "Phone", text: $phoneNumber, keyboardType: .phonePad)
 
                 FormField(title: "Address", placeholder: "Address", text: $address)
+                
+                // Display error message if any
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .foregroundColor(.red)
+                        .font(.footnote)
+                        .padding(.top, 8)
+                }
             }
             
-            // TODO: Add error message display when save logic is back
-            // if let errorMessage = errorMessage { ... }
-
             Spacer()
 
             // Action Button
-            Button("Next") {
+            Button(action: {
                 handleNextOrSave()
+            }) {
+                if isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                } else {
+                    Text("Next")
+                        .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                }
             }
             .buttonStyle(PrimaryButtonStyle())
-            // .disabled(isLoading) // Re-enable when loading state is added
+            .disabled(isLoading || name.isEmpty || address.isEmpty)
         }
         .padding()
         // .navigationTitle("Fill in information") // Title set by presenting NavigationView
@@ -90,9 +105,17 @@ struct CompleteInfoView: View {
         print("Loading user data for editing...")
         name = user.name
         address = user.address ?? ""
-        // TODO: Load phone number and DOB if/when added to User model
-        // phoneNumber = user.phoneNumber ?? ""
-        // dateOfBirth = user.dateOfBirth ?? Date()
+        phoneNumber = user.mobileNumber ?? ""
+        
+        // Parse date of birth if available
+        if let dobString = user.dateOfBirth, !dobString.isEmpty {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            if let dob = dateFormatter.date(from: dobString) {
+                dateOfBirth = dob
+            }
+        }
+        
         didLoadData = true
     }
     
@@ -103,19 +126,47 @@ struct CompleteInfoView: View {
         print("Phone: \(phoneNumber)")
         print("Address: \(address)")
         
+        // Format date to string
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dobString = dateFormatter.string(from: dateOfBirth)
+        
+        isLoading = true
+        
         if isEditing {
-            // TODO: Call actual save function when API is ready
-            // saveProfile()
-             print("Simulating Save...")
-             dismiss() // Dismiss after "saving"
+            // Save profile using the AuthViewModel
+            authViewModel.updateProfile(
+                name: name, 
+                dateOfBirth: dobString, 
+                mobileNumber: phoneNumber, 
+                address: address
+            ) { success, error in
+                isLoading = false
+                if success {
+                    print("Profile updated successfully")
+                    dismiss() // Dismiss after saving
+                } else {
+                    errorMessage = error ?? "Failed to update profile"
+                    print("Error updating profile: \(errorMessage ?? "")")
+                }
+            }
         } else {
             // Logic after completing initial info during sign up
-            // This might involve: 
-            // 1. Trying to save the data (if API exists)
-            // 2. Dismissing this view and showing the SignInView
-             print("Simulating completion...")
-             // For now, just dismiss. The parent view (likely AuthContainer) will show SignIn.
-             dismiss() 
+            authViewModel.updateProfile(
+                name: name, 
+                dateOfBirth: dobString, 
+                mobileNumber: phoneNumber, 
+                address: address
+            ) { success, error in
+                isLoading = false
+                if success {
+                    print("Profile completed successfully")
+                    dismiss() // Dismiss after saving
+                } else {
+                    errorMessage = error ?? "Failed to complete profile"
+                    print("Error completing profile: \(errorMessage ?? "")")
+                }
+            }
         }
     }
     
@@ -187,7 +238,19 @@ struct CompleteInfoView_Previews: PreviewProvider {
              // Set up the ViewModel first
              let editVM: AuthViewModel = {
                  let vm = AuthViewModel()
-                 vm.currentUser = User(id: 1, name: "Jane Doe", emailAddress: "jane@test.com", address: "123 Main St", latitude: nil, longitude: nil, createdAt: "", updatedAt: "")
+                 vm.currentUser = User(
+                     id: 1, 
+                     name: "Jane Doe", 
+                     emailAddress: "jane@test.com", 
+                     address: "123 Main St", 
+                     latitude: nil, 
+                     longitude: nil, 
+                     dateOfBirth: nil,
+                     mobileNumber: nil,
+                     onboarded: false,
+                     createdAt: "", 
+                     updatedAt: ""
+                 )
                  vm.isAuthenticated = true // Also set authenticated state for consistency
                  return vm
              }() // Immediately execute the closure to assign the configured VM

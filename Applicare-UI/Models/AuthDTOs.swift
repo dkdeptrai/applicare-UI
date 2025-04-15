@@ -26,13 +26,14 @@ struct LoginResponseDTO: Codable {
 // MARK: - Registration
 struct RegisterRequestDTO: Codable {
     let name: String
-    let email: String
+    let email_address: String
     let password: String
     let passwordConfirmation: String
     
     enum CodingKeys: String, CodingKey {
         case name
-        case email, password
+        case email_address
+        case password
         case passwordConfirmation = "password_confirmation"
     }
 }
@@ -53,7 +54,7 @@ struct VerifyEmailResponseDTO: Codable {
 
 // MARK: - Resend Verification
 struct ResendVerificationRequestDTO: Codable {
-    let email: String
+    let email_address: String
 }
 
 struct ResendVerificationResponseDTO: Codable {
@@ -79,7 +80,7 @@ struct EmailVerificationDTO: Codable {
 
 // MARK: - Resend Verification
 struct ResendVerificationDTO: Codable {
-    let email: String
+    let email_address: String
 }
 
 // MARK: - Error Response

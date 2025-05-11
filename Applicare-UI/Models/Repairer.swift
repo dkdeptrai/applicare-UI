@@ -5,11 +5,13 @@ import Foundation // Import Foundation for Codable, Double, etc.
 struct Repairer: Codable, Identifiable, Hashable {
     let id: Int
     let name: String
-    let emailAddress: String? // Made optional as it might not be needed for list view
-    let hourlyRate: Double?
-    let serviceRadius: Int?
-    let latitude: Double
-    let longitude: Double
+    let email_address: String
+    let hourly_rate: Double
+    let service_radius: Int
+    let latitude: Double?
+    let longitude: Double?
+    let created_at: String
+    let updated_at: String
 
     // Placeholder fields for UI - these would ideally come from the API or be derived
     var title: String = "Appliance Repairer" // Default value
@@ -23,11 +25,13 @@ struct Repairer: Codable, Identifiable, Hashable {
     enum CodingKeys: String, CodingKey {
         case id
         case name
-        case emailAddress = "email_address"
-        case hourlyRate = "hourly_rate"
-        case serviceRadius = "service_radius"
+        case email_address
+        case hourly_rate
+        case service_radius
         case latitude
         case longitude
+        case created_at
+        case updated_at
         // Placeholders are not typically part of API coding keys unless they come from the API
         // case title, distanceKm, rating, yearsExperience, isProfessional, imageName
     }
@@ -43,11 +47,16 @@ struct Repairer: Codable, Identifiable, Hashable {
 
     // Dummy data for previews and testing
     static let dummyRepairers: [Repairer] = [
-        Repairer(id: 1, name: "John Doe", emailAddress: "john.doe@example.com", hourlyRate: 50.0, serviceRadius: 10, latitude: 34.0522, longitude: -118.2437, title: "Appliance Repairer", distanceKm: 5.0, rating: 4.6, yearsExperience: 3, isProfessional: true, imageName: nil),
-        Repairer(id: 2, name: "Jane Smith", emailAddress: "jane.smith@example.com", hourlyRate: 55.0, serviceRadius: 15, latitude: 34.0525, longitude: -118.2440, title: "Plumber", distanceKm: 5.2, rating: 4.8, yearsExperience: 5, isProfessional: true, imageName: nil),
-        Repairer(id: 3, name: "Robert Johnson", emailAddress: "robert.j@example.com", hourlyRate: 45.0, serviceRadius: 8, latitude: 34.0519, longitude: -118.2435, title: "Electrician", distanceKm: 4.8, rating: 4.5, yearsExperience: 2, isProfessional: false, imageName: nil),
-         Repairer(id: 4, name: "Maria Garcia", emailAddress: "maria.g@example.com", hourlyRate: 60.0, serviceRadius: 20, latitude: 34.0530, longitude: -118.2450, title: "HVAC Technician", distanceKm: 6.1, rating: 4.7, yearsExperience: 4, isProfessional: true, imageName: nil)
+        Repairer(id: 1, name: "John Doe", email_address: "john.doe@example.com", hourly_rate: 50.0, service_radius: 10, latitude: 34.0522, longitude: -118.2437, created_at: "2024-04-01T12:00:00", updated_at: "2024-04-01T12:00:00", title: "Appliance Repairer", distanceKm: 5.0, rating: 4.6, yearsExperience: 3, isProfessional: true, imageName: nil),
+        Repairer(id: 2, name: "Jane Smith", email_address: "jane.smith@example.com", hourly_rate: 55.0, service_radius: 15, latitude: 34.0525, longitude: -118.2440, created_at: "2024-04-01T12:00:00", updated_at: "2024-04-01T12:00:00", title: "Plumber", distanceKm: 5.2, rating: 4.8, yearsExperience: 5, isProfessional: true, imageName: nil),
+        Repairer(id: 3, name: "Robert Johnson", email_address: "robert.j@example.com", hourly_rate: 45.0, service_radius: 8, latitude: 34.0519, longitude: -118.2435, created_at: "2024-04-01T12:00:00", updated_at: "2024-04-01T12:00:00", title: "Electrician", distanceKm: 4.8, rating: 4.5, yearsExperience: 2, isProfessional: false, imageName: nil),
+         Repairer(id: 4, name: "Maria Garcia", email_address: "maria.g@example.com", hourly_rate: 60.0, service_radius: 20, latitude: 34.0530, longitude: -118.2450, created_at: "2024-04-01T12:00:00", updated_at: "2024-04-01T12:00:00", title: "HVAC Technician", distanceKm: 6.1, rating: 4.7, yearsExperience: 4, isProfessional: true, imageName: nil)
     ]
 
      static let singleDummy = dummyRepairers[0] // For single repairer previews
+}
+
+struct RepairerResponseDTO: Codable {
+    let token: String
+    let repairer: Repairer
 } 

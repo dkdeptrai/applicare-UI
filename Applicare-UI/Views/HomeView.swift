@@ -2,8 +2,6 @@
 //  HomeView.swift
 //  Applicare-UI
 //
-//  Created by Applicare on 16/3/25.
-//
 
 import SwiftUI
 
@@ -77,6 +75,17 @@ struct HomeView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+
+                // NavigationLink to the BookingsListView
+                NavigationLink(destination: BookingsListView()) {
+                    Text("Your Bookings")
+                        .fontWeight(.semibold)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue.opacity(0.8))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }

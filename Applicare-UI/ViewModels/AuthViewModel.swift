@@ -2,8 +2,6 @@
 //  AuthViewModel.swift
 //  Applicare-UI
 //
-//  Created by Applicare on 16/3/25.
-//
 
 import Foundation
 import SwiftUI

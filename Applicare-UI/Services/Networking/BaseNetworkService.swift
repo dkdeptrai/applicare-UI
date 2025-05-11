@@ -2,8 +2,6 @@
 //  BaseNetworkService.swift
 //  Applicare-UI
 //
-//  Created by Applicare on 16/3/25.
-//
 
 import Foundation
 
@@ -33,10 +31,14 @@ class BaseNetworkService: NetworkServiceProtocol {
         
         // Add authentication header if needed
         if endpoint.requiresAuthentication {
-            guard let token = AuthNetworkService.shared.getToken() else {
+            // Get the active token - prioritize repairer token if logged in as repairer
+            let token = AuthNetworkService.shared.getRepairerToken() ?? AuthNetworkService.shared.getToken()
+            
+            guard let token = token else {
                 completion(.failure(.unauthorized))
                 return
             }
+            
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         }
         

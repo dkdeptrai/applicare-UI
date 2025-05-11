@@ -2,8 +2,6 @@
 //  AuthNetworkService.swift
 //  Applicare-UI
 //
-//  Created by Applicare on 16/3/25.
-//
 
 import Foundation
 
@@ -13,12 +11,24 @@ protocol AuthNetworkServiceProtocol {
     func register(registerRequest: RegisterRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void)
     func logout(completion: @escaping (Result<Void, NetworkError>) -> Void)
     
+    // Repairer auth methods
+    func repairerLogin(loginRequest: LoginRequestDTO, completion: @escaping (Result<RepairerResponseDTO, NetworkError>) -> Void)
+    func repairerRegister(registerRequest: RegisterRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void)
+    func repairerLogout(completion: @escaping (Result<Void, NetworkError>) -> Void)
+    
     // Auth state management
     func setAuthData(token: String, userId: Int)
     func getToken() -> String?
     func getUserId() -> Int?
     func clearAuthData()
     func isUserLoggedIn() -> Bool
+    
+    // Repairer auth state management
+    func setRepairerAuthData(token: String, repairerId: Int)
+    func getRepairerToken() -> String?
+    func getRepairerId() -> Int?
+    func clearRepairerAuthData()
+    func isRepairerLoggedIn() -> Bool
 }
 
 /// Service implementation for authentication-related API calls
@@ -32,6 +42,10 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
     // Store local auth data
     private var authToken: String?
     private var userId: Int?
+    
+    // Store repairer auth data
+    private var repairerAuthToken: String?
+    private var repairerId: Int?
     
     // Private initialization to enforce singleton pattern
     private init(networkService: NetworkServiceProtocol = BaseNetworkService.shared) {
@@ -79,6 +93,43 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
     /// Check if user is logged in
     func isUserLoggedIn() -> Bool {
         return getToken() != nil && getUserId() != nil
+    }
+    
+    // MARK: - Repairer Authentication State Management
+    
+    func setRepairerAuthData(token: String, repairerId: Int) {
+        self.repairerAuthToken = token
+        self.repairerId = repairerId
+        UserDefaults.standard.set(token, forKey: "repairerAuthToken")
+        UserDefaults.standard.set(repairerId, forKey: "repairerId")
+    }
+    
+    func getRepairerToken() -> String? {
+        if repairerAuthToken == nil {
+            repairerAuthToken = UserDefaults.standard.string(forKey: "repairerAuthToken")
+        }
+        return repairerAuthToken
+    }
+    
+    func getRepairerId() -> Int? {
+        if repairerId == nil {
+            repairerId = UserDefaults.standard.integer(forKey: "repairerId")
+            if repairerId == 0 {
+                repairerId = nil
+            }
+        }
+        return repairerId
+    }
+    
+    func clearRepairerAuthData() {
+        repairerAuthToken = nil
+        repairerId = nil
+        UserDefaults.standard.removeObject(forKey: "repairerAuthToken")
+        UserDefaults.standard.removeObject(forKey: "repairerId")
+    }
+    
+    func isRepairerLoggedIn() -> Bool {
+        return getRepairerToken() != nil && getRepairerId() != nil
     }
     
     // MARK: - API Methods
@@ -130,6 +181,51 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         networkService.request(APIEndpoint.logout(id: userId), body: nil) { [weak self] result in
             // Even if the server logout fails, we still clear local auth data
             self?.clearAuthData()
+            completion(result)
+        }
+    }
+    
+    // MARK: - Repairer API Methods
+    
+    func repairerLogin(loginRequest: LoginRequestDTO, completion: @escaping (Result<RepairerResponseDTO, NetworkError>) -> Void) {
+        networkService.request(APIEndpoint.repairerLogin, body: loginRequest) { [weak self] (result: Result<RepairerResponseDTO, NetworkError>) in
+            switch result {
+            case .success(let response):
+                self?.setRepairerAuthData(token: response.token, repairerId: response.repairer.id)
+                completion(result)
+            case .failure(let error):
+                switch error {
+                case .unauthorized:
+                    completion(.failure(.customError(message: "Invalid email or password")))
+                default:
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+    
+    func repairerRegister(registerRequest: RegisterRequestDTO, completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        let registrationRequest = UserRegistrationDTO(
+            user: UserRegistrationDTO.UserCreateDTO(
+                name: registerRequest.name,
+                email_address: registerRequest.email_address,
+                password: registerRequest.password,
+                password_confirmation: registerRequest.passwordConfirmation
+            )
+        )
+        
+        networkService.request(APIEndpoint.repairerRegister, body: registrationRequest, completion: completion)
+    }
+    
+    func repairerLogout(completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        guard let repairerId = getRepairerId() else {
+            clearRepairerAuthData()
+            completion(.failure(.customError(message: "Repairer not logged in or ID missing")))
+            return
+        }
+        
+        networkService.request(APIEndpoint.repairerLogout(id: repairerId), body: nil) { [weak self] result in
+            self?.clearRepairerAuthData()
             completion(result)
         }
     }

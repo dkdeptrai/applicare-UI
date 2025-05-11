@@ -102,7 +102,7 @@ struct RepairerProfileView: View {
         }
         // Bottom Buttons - overlay or place outside ScrollView depending on desired behavior
         .safeAreaInset(edge: .bottom) {
-            BottomButtonsView()
+            BottomButtonsView(repairer: repairer)
                 .background(.thinMaterial) // Add background for visibility
         }
         // Use .navigationViewStyle(.stack) if needed for specific navigation behavior
@@ -150,10 +150,16 @@ struct HeaderView: View {
                     Image(systemName: "location.fill")
                         .foregroundColor(.gray)
                         .font(.caption)
-                    // Construct address string from lat/lon or add address field later
-                    Text("Location: \(String(format: "%.2f", repairer.latitude)), \(String(format: "%.2f", repairer.longitude))") // Placeholder address
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                    // Safely unwrap latitude and longitude
+                    if let latitude = repairer.latitude, let longitude = repairer.longitude {
+                        Text("Location: \(String(format: "%.2f", latitude)), \(String(format: "%.2f", longitude))")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    } else {
+                        Text("Location not available")
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
                 }
             }
             Spacer() // Push content to the left
@@ -378,20 +384,30 @@ struct ReviewRow: View {
 }
 
 struct BottomButtonsView: View {
+    // Add properties for a mock booking
+    let repairer: Repairer
+    
+    // Mock booking for demonstration purposes
+    private var mockBooking: Booking {
+        Booking(
+            id: 1, // You'd use a real booking ID if available
+            repairer_id: repairer.id,
+            service_id: 1, // Mock service ID
+            start_time: "", // Empty for now
+            end_time: "", // Empty for now
+            status: "pending",
+            address: "",
+            notes: nil,
+            created_at: "",
+            updated_at: ""
+        )
+    }
+    
     var body: some View {
         HStack(spacing: 15) {
-            Button {
-                 // Message Action
-                 print("Message tapped")
-             } label: {
-                 Text("Message")
-                     .frame(maxWidth: .infinity) // Make buttons expand
-                     .padding()
-                     .background(Color.gray.opacity(0.2)) // Lighter background
-                     .foregroundColor(.blue)
-                     .cornerRadius(10)
-                     .fontWeight(.semibold)
-             }
+            // Replace the Message button with ChatButton
+            ChatButton(booking: mockBooking, contactName: repairer.name)
+                .frame(maxWidth: .infinity)
 
             Button {
                  // Book Now Action

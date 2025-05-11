@@ -2,20 +2,36 @@
 //  APIEndpoint.swift
 //  Applicare-UI
 //
-//  Created by Applicare on 16/3/25.
-//
 
 import Foundation
 
 /// Represents all API endpoints in the application
 enum APIEndpoint: APIEndpointProtocol {
-    // Base API URL
-    static let baseURL = "http://127.0.0.1:3000/api/v1"
+    // Base API URL - Consider making this configurable per environment
+    #if DEBUG
+    // In debug, check for environment variable or use default local server
+    static let baseURL = ProcessInfo.processInfo.environment["API_BASE_URL"] ?? "http://127.0.0.1:3000/api/v1"
+    #else
+    // Production URL would be set here for release builds
+    static let baseURL = "https://api.applicare.com/api/v1"
+    #endif
+    
+    // Log endpoint info for debugging
+    static func logEndpoint(_ endpoint: APIEndpoint, method: String, url: String) {
+        #if DEBUG
+        print("📡 API REQUEST: \(method) \(url)")
+        #endif
+    }
     
     // Auth endpoints
     case login
     case logout(id: Int)
     case register
+    
+    // Repairer auth endpoints
+    case repairerLogin
+    case repairerLogout(id: Int)
+    case repairerRegister
     
     // User endpoints
     case getCurrentUser
@@ -29,6 +45,16 @@ enum APIEndpoint: APIEndpointProtocol {
     case getBooking(id: Int)
     case updateBooking(id: Int)
     case cancelBooking(id: Int)
+    
+    // Repairer booking endpoints
+    case getRepairerBookings(status: String?, startDate: String?, endDate: String?)
+    case getRepairerBooking(id: Int)
+    case updateRepairerBookingStatus(id: Int, status: String)
+    case addRepairerBookingNote(id: Int, note: String)
+    
+    // Chat endpoints
+    case getMessages(bookingId: Int)
+    case sendMessage
     
     // Repairer endpoints
     case getRepairerCalendar(repairerId: Int, year: Int, month: Int)
@@ -44,6 +70,14 @@ enum APIEndpoint: APIEndpointProtocol {
             return "\(APIEndpoint.baseURL)/sessions/\(id)"
         case .register:
             return "\(APIEndpoint.baseURL)/users"
+            
+        // Repairer auth endpoints
+        case .repairerLogin:
+            return "\(APIEndpoint.baseURL)/repairer_sessions"
+        case .repairerLogout(let id):
+            return "\(APIEndpoint.baseURL)/repairer_sessions/\(id)"
+        case .repairerRegister:
+            return "\(APIEndpoint.baseURL)/repairers"
             
         // User endpoints
         case .getCurrentUser:
@@ -72,6 +106,41 @@ enum APIEndpoint: APIEndpointProtocol {
         case .cancelBooking(let id):
             return "\(APIEndpoint.baseURL)/bookings/\(id)"
             
+        // Repairer booking endpoints
+        case .getRepairerBookings(let status, let startDate, let endDate):
+            var components = URLComponents(string: "\(APIEndpoint.baseURL)/repairer/bookings")
+            var queryItems: [URLQueryItem] = []
+            
+            if let status = status {
+                queryItems.append(URLQueryItem(name: "status", value: status))
+            }
+            
+            if let startDate = startDate {
+                queryItems.append(URLQueryItem(name: "start_date", value: startDate))
+            }
+            
+            if let endDate = endDate {
+                queryItems.append(URLQueryItem(name: "end_date", value: endDate))
+            }
+            
+            if !queryItems.isEmpty {
+                components?.queryItems = queryItems
+            }
+            
+            return components?.string ?? "\(APIEndpoint.baseURL)/repairer/bookings"
+        case .getRepairerBooking(let id):
+            return "\(APIEndpoint.baseURL)/repairer/bookings/\(id)"
+        case .updateRepairerBookingStatus(let id, _):
+            return "\(APIEndpoint.baseURL)/repairer/bookings/\(id)"
+        case .addRepairerBookingNote(let id, _):
+            return "\(APIEndpoint.baseURL)/repairer/bookings/\(id)/notes"
+            
+        // Chat endpoints
+        case .getMessages(let bookingId):
+            return "\(APIEndpoint.baseURL)/bookings/\(bookingId)/messages"
+        case .sendMessage:
+            return "\(APIEndpoint.baseURL)/messages"
+            
         // Repairer endpoints
         case .getRepairerCalendar(let repairerId, let year, let month):
             return "\(APIEndpoint.baseURL)/repairers/\(repairerId)/calendar/\(year)/\(month)"
@@ -90,21 +159,27 @@ enum APIEndpoint: APIEndpointProtocol {
     var httpMethod: String {
         switch self {
         // POST Methods
-        case .login, .register, .createBooking:
+        case .login, .register, .createBooking, .sendMessage,
+             .repairerLogin, .repairerRegister, .addRepairerBookingNote:
             return "POST"
             
         // DELETE Methods
-        case .logout, .cancelBooking:
+        case .logout, .cancelBooking, .repairerLogout:
             return "DELETE"
             
         // PUT Methods
         case .updateBooking, .updateProfile:
             return "PUT"
             
+        // PATCH Methods
+        case .updateRepairerBookingStatus:
+            return "PATCH"
+            
         // GET Methods
         case .getCurrentUser, .getUser, .getProfile, 
-             .getAllBookings, .getBooking, 
-             .getRepairerCalendar, .getNearbyRepairers:
+             .getAllBookings, .getBooking, .getMessages,
+             .getRepairerCalendar, .getNearbyRepairers,
+             .getRepairerBookings, .getRepairerBooking:
             return "GET"
         }
         // No default needed as all cases should be covered
@@ -113,12 +188,13 @@ enum APIEndpoint: APIEndpointProtocol {
     // Indicates if the endpoint requires authentication
     var requiresAuthentication: Bool {
         switch self {
-        case .login, .register:
+        case .login, .register, .repairerLogin, .repairerRegister:
             return false
-        case .logout( _), .getCurrentUser, .getUser( _),
-             .getAllBookings, .createBooking, .getBooking( _), .updateBooking( _), .cancelBooking( _),
-             .getProfile, .updateProfile,
-             .getRepairerCalendar( _, _, _), .getNearbyRepairers( _, _, _):
+        case .logout, .getCurrentUser, .getUser,
+             .getAllBookings, .createBooking, .getBooking, .updateBooking, .cancelBooking,
+             .getProfile, .updateProfile, .getMessages, .sendMessage,
+             .getRepairerCalendar, .getNearbyRepairers,
+             .repairerLogout, .getRepairerBookings, .getRepairerBooking, .updateRepairerBookingStatus, .addRepairerBookingNote:
             return true
         }
         // No default needed as all cases are now covered
@@ -126,6 +202,8 @@ enum APIEndpoint: APIEndpointProtocol {
     
     // Returns a URL from the endpoint's URL string
     func url() -> URL? {
-        return URL(string: urlString)
+        let url = URL(string: urlString)
+        APIEndpoint.logEndpoint(self, method: httpMethod, url: urlString)
+        return url
     }
 } 

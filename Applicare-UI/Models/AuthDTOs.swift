@@ -12,11 +12,17 @@ struct LoginRequestDTO: Codable {
 }
 
 struct LoginResponseDTO: Codable {
-    let token: String
+    let access_token: String
+    let refresh_token: String
+    let token_type: String
+    let expires_in: Int
     let user_id: Int
     
     enum CodingKeys: String, CodingKey {
-        case token
+        case access_token
+        case refresh_token
+        case token_type
+        case expires_in
         case user_id
     }
 }
@@ -84,4 +90,16 @@ struct ResendVerificationDTO: Codable {
 // MARK: - Error Response
 struct ErrorResponseDTO: Codable {
     let error: String
+}
+
+// MARK: - Token Refresh
+struct TokenRefreshRequestDTO: Codable {
+    let refresh_token: String
+}
+
+struct TokenRefreshResponseDTO: Codable {
+    let access_token: String
+    let refresh_token: String
+    let token_type: String
+    let expires_in: Int
 } 

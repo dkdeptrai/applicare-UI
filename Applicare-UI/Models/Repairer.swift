@@ -57,6 +57,9 @@ struct Repairer: Codable, Identifiable, Hashable {
 }
 
 struct RepairerResponseDTO: Codable {
-    let token: String
+    let access_token: String
+    let refresh_token: String
+    let token_type: String
+    let expires_in: Int
     let repairer: Repairer
 } 

@@ -27,6 +27,7 @@ enum APIEndpoint: APIEndpointProtocol {
     case login
     case logout(id: Int)
     case register
+    case refreshToken
     
     // Repairer auth endpoints
     case repairerLogin
@@ -70,6 +71,8 @@ enum APIEndpoint: APIEndpointProtocol {
             return "\(APIEndpoint.baseURL)/sessions/\(id)"
         case .register:
             return "\(APIEndpoint.baseURL)/users"
+        case .refreshToken:
+            return "\(APIEndpoint.baseURL)/token/refresh"
             
         // Repairer auth endpoints
         case .repairerLogin:
@@ -160,7 +163,8 @@ enum APIEndpoint: APIEndpointProtocol {
         switch self {
         // POST Methods
         case .login, .register, .createBooking, .sendMessage,
-             .repairerLogin, .repairerRegister, .addRepairerBookingNote:
+             .repairerLogin, .repairerRegister, .addRepairerBookingNote,
+             .refreshToken:
             return "POST"
             
         // DELETE Methods
@@ -188,7 +192,7 @@ enum APIEndpoint: APIEndpointProtocol {
     // Indicates if the endpoint requires authentication
     var requiresAuthentication: Bool {
         switch self {
-        case .login, .register, .repairerLogin, .repairerRegister:
+        case .login, .register, .repairerLogin, .repairerRegister, .refreshToken:
             return false
         case .logout, .getCurrentUser, .getUser,
              .getAllBookings, .createBooking, .getBooking, .updateBooking, .cancelBooking,

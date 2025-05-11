@@ -389,17 +389,11 @@ struct BottomButtonsView: View {
     
     // Mock booking for demonstration purposes
     private var mockBooking: Booking {
-        Booking(
-            id: 1, // You'd use a real booking ID if available
+        Booking.sampleBooking(
             repairer_id: repairer.id,
-            service_id: 1, // Mock service ID
-            start_time: "", // Empty for now
-            end_time: "", // Empty for now
             status: "pending",
-            address: "",
             notes: nil,
-            created_at: "",
-            updated_at: ""
+            repairer_note: nil
         )
     }
     

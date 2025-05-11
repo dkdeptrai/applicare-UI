@@ -68,18 +68,7 @@ struct ChatButtonSmall: View {
 
 struct ChatButton_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleBooking = Booking(
-            id: 1,
-            repairer_id: 123,
-            service_id: 456,
-            start_time: "2023-08-01T10:00:00.000Z",
-            end_time: "2023-08-01T12:00:00.000Z",
-            status: "confirmed",
-            address: "123 Main St",
-            notes: nil,
-            created_at: "2023-07-25T09:30:00.000Z",
-            updated_at: "2023-07-25T09:30:00.000Z"
-        )
+        let sampleBooking = Booking.sampleBooking()
         
         VStack {
             ChatButton(booking: sampleBooking, contactName: "John Doe")

@@ -149,6 +149,15 @@
 		D04F9B362DD085C7000A1C97 /* RepairerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B352DD085C7000A1C97 /* RepairerHomeView.swift */; };
 		D04F9B372DD085C7000A1C97 /* RepairerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B352DD085C7000A1C97 /* RepairerHomeView.swift */; };
 		D04F9B382DD085C7000A1C97 /* RepairerHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B352DD085C7000A1C97 /* RepairerHomeView.swift */; };
+		D04F9B3A2DD09F6A000A1C97 /* UserCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */; };
+		D04F9B3B2DD09F6A000A1C97 /* UserCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */; };
+		D04F9B3C2DD09F6A000A1C97 /* UserCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */; };
+		D04F9B3E2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B3D2DD0ADE9000A1C97 /* RepairerChatView.swift */; };
+		D04F9B3F2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B3D2DD0ADE9000A1C97 /* RepairerChatView.swift */; };
+		D04F9B402DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B3D2DD0ADE9000A1C97 /* RepairerChatView.swift */; };
+		D04F9B462DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */; };
+		D04F9B472DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */; };
+		D04F9B482DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */; };
 		D05BC6852DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
 		D05BC6862DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
 		D05BC6872DAD6CC100AB5DB4 /* CompleteInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */; };
@@ -260,6 +269,9 @@
 		D04F9B2D2DD08540000A1C97 /* RepairerSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerSignUpView.swift; sourceTree = "<group>"; };
 		D04F9B312DD0854E000A1C97 /* RepairerProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerProfileView.swift; sourceTree = "<group>"; };
 		D04F9B352DD085C7000A1C97 /* RepairerHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerHomeView.swift; sourceTree = "<group>"; };
+		D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCacheService.swift; sourceTree = "<group>"; };
+		D04F9B3D2DD0ADE9000A1C97 /* RepairerChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerChatView.swift; sourceTree = "<group>"; };
+		D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerChatButton.swift; sourceTree = "<group>"; };
 		D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteInfoView.swift; sourceTree = "<group>"; };
 		D05BC6882DAD6CD500AB5DB4 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		D05BC6902DAD711400AB5DB4 /* InfoRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoRow.swift; sourceTree = "<group>"; };
@@ -322,6 +334,7 @@
 				D014F2872DAA9BD200AA4623 /* CustomTextField.swift */,
 				D014F2882DAA9BD200AA4623 /* SocialButton.swift */,
 				D021F7A82DC7A9E10035DDE1 /* ChatButton.swift */,
+				D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */,
 				D021F7A92DC7A9E10035DDE1 /* MessageBubble.swift */,
 			);
 			path = Components;
@@ -371,6 +384,7 @@
 			isa = PBXGroup;
 			children = (
 				D014F2982DAA9BD200AA4623 /* Networking */,
+				D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -394,6 +408,7 @@
 				D014F29E2DAA9BD200AA4623 /* AnimatedImageView.swift */,
 				D014F29F2DAA9BD200AA4623 /* CheckboxToggleStyle.swift */,
 				D0A21B332DAC072C00414398 /* RepairerBookingView.swift */,
+				D04F9B3D2DD0ADE9000A1C97 /* RepairerChatView.swift */,
 				D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */,
 				D07FF4C82DC7B6F9001EFBDF /* SimpleChatView.swift */,
 				D021F7B82DC7AE5E0035DDE1 /* BookingsListView.swift */,
@@ -802,6 +817,7 @@
 				D0A21B452DAC076900414398 /* Repairer.swift in Sources */,
 				D0A21B462DAC076900414398 /* User.swift in Sources */,
 				D014F2F92DAA9BD200AA4623 /* SocialButton.swift in Sources */,
+				D04F9B3A2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2FA2DAA9BD200AA4623 /* UserNetworkService.swift in Sources */,
 				D014F2FB2DAA9BD200AA4623 /* CustomTextField.swift in Sources */,
 				D014F2FF2DAA9BD200AA4623 /* AnimatedImageView.swift in Sources */,
@@ -810,6 +826,7 @@
 				D014F3022DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
 				D014F3032DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
 				D014F3042DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
+				D04F9B462DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
 				D014F3052DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
 				D04F9B262DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
 				D014F3062DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
@@ -833,6 +850,7 @@
 				D021F7B22DC7AA000035DDE1 /* ChatView.swift in Sources */,
 				D014F3102DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D05BC6922DAD711400AB5DB4 /* InfoRow.swift in Sources */,
+				D04F9B3E2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F3112DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D021F7C22DC7AF180035DDE1 /* BookingNetworkService.swift in Sources */,
 				D014F3122DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
@@ -886,11 +904,14 @@
 				D014F2C92DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2CB2DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2CC2DAA9BD200AA4623 /* LogoView.swift in Sources */,
+				D04F9B3C2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2CD2DAA9BD200AA4623 /* HomeView.swift in Sources */,
+				D04F9B472DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
 				D014F2CE2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
 				D014F2D02DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2D12DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D07FF4C92DC7B6F9001EFBDF /* SimpleChatView.swift in Sources */,
+				D04F9B402DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F2D22DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
 				D04F9B272DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
 				D014F2D32DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
@@ -944,11 +965,14 @@
 				D014F2E72DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2E92DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2EA2DAA9BD200AA4623 /* LogoView.swift in Sources */,
+				D04F9B3B2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2EB2DAA9BD200AA4623 /* HomeView.swift in Sources */,
+				D04F9B482DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
 				D014F2EC2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
 				D014F2EE2DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2EF2DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D07FF4CA2DC7B6F9001EFBDF /* SimpleChatView.swift in Sources */,
+				D04F9B3F2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F2F02DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
 				D04F9B282DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
 				D014F2F12DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,

@@ -11,28 +11,134 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
     @Published var messageText: String = ""
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
+    @Published var connectionState: ConnectionState = .disconnected
+    @Published var needsReauthentication: Bool = false
+    
+    // Callback for when messages are updated
+    var onMessagesUpdated: ((Int) -> Void)?
+    
+    // Add state enum for more granular status reporting
+    enum ConnectionState: String {
+        case disconnected = "Disconnected"
+        case connecting = "Connecting..."
+        case connected = "Connected"
+        case reconnecting = "Reconnecting..."
+        case error = "Connection error"
+        case authError = "Authentication error"
+    }
     
     private var chatService: ChatNetworkServiceProtocol
     private var bookingId: Int?
+    private var connectionAttempts: Int = 0
+    private var maxConnectionAttempts: Int = 3
     
     init(chatService: ChatNetworkServiceProtocol = ChatNetworkService.shared) {
         self.chatService = chatService
         self.chatService.messageDelegate = self
+        
+        // Set up notification observers for token refresh failures
+        setupAuthNotifications()
+    }
+    
+    deinit {
+        // Remove notification observers
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setupAuthNotifications() {
+        // Listen for user reauthentication required notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleUserReauthenticationRequired),
+            name: .userReauthenticationRequired,
+            object: nil
+        )
+        
+        // Listen for repairer reauthentication required notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRepairerReauthenticationRequired),
+            name: .repairerReauthenticationRequired,
+            object: nil
+        )
+    }
+    
+    @objc private func handleUserReauthenticationRequired() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            print("🔐 User authentication expired - reauthentication required")
+            self.needsReauthentication = true
+            self.connectionState = .authError
+            self.errorMessage = "Authentication expired. Please log in again."
+            self.objectWillChange.send()
+        }
+    }
+    
+    @objc private func handleRepairerReauthenticationRequired() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            print("🔐 Repairer authentication expired - reauthentication required")
+            self.needsReauthentication = true
+            self.connectionState = .authError
+            self.errorMessage = "Authentication expired. Please log in again."
+            self.objectWillChange.send()
+        }
     }
     
     // MARK: - Public Methods
     
     func loadChat(forBookingId bookingId: Int) {
         self.bookingId = bookingId
+        self.connectionAttempts = 0
         isLoading = true
         errorMessage = nil
+        connectionState = .connecting
         
         print("Loading chat for booking #\(bookingId)")
         
+        // Check if we have auth tokens before trying to load
+        if AuthNetworkService.shared.getRepairerToken() == nil && AuthNetworkService.shared.getToken() == nil {
+            isLoading = false
+            errorMessage = "Authentication required: Please log in to access chat"
+            connectionState = .error
+            print("❌ Error: No authentication token available")
+            return
+        }
+        
+        // Connect to WebSocket first - don't wait for message loading to succeed
+        // This ensures real-time messages work even if history fails to load
+        chatService.connectToChat(bookingId: bookingId)
+        
+        // Add a connection verification check
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            guard let self = self, self.bookingId == bookingId else { return }
+            
+            // Force UI update to show connection status
+            if self.chatService.isConnected() {
+                print("✅ WebSocket connection verified")
+                self.connectionState = .connected
+                self.objectWillChange.send()
+            } else {
+                print("⚠️ WebSocket connection not verified, attempting reconnect")
+                self.connectionState = .reconnecting
+                self.objectWillChange.send()
+                self.retryConnection(bookingId: bookingId)
+            }
+        }
+        
+        // Schedule reconnection check to ensure WebSocket reliability
+        scheduleReconnectionCheck(bookingId: bookingId)
+        
         // Load message history
+        loadMessageHistory(bookingId: bookingId)
+    }
+    
+    private func loadMessageHistory(bookingId: Int) {
         chatService.getMessages(bookingId: bookingId) { [weak self] result in
             DispatchQueue.main.async {
-                self?.isLoading = false
+                guard let self = self, self.bookingId == bookingId else { return }
+                
+                self.isLoading = false
                 
                 switch result {
                 case .success(let messages):
@@ -45,20 +151,98 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
                         print("Sender info: \(String(describing: firstMessage.sender_info))")
                     }
                     
-                    self?.messages = messages.sorted(by: { $0.created_at < $1.created_at })
+                    self.messages = messages.sorted(by: { $0.created_at < $1.created_at })
                     
-                    // Schedule reconnection check after a delay
-                    self?.scheduleReconnectionCheck(bookingId: bookingId)
+                    // Force UI update
+                    self.objectWillChange.send()
+                    
+                    // Call the callback with the new message count
+                    let count = self.messages.count
+                    self.onMessagesUpdated?(count)
                     
                 case .failure(let error):
-                    self?.errorMessage = "Failed to load messages: \(error.localizedDescription)"
-                    print("Error loading messages: \(error)")
+                    if case .unauthorized = error {
+                        self.errorMessage = "Authentication error: Unable to access chat history. Tap to retry."
+                        print("⚠️ Auth error loading messages, but WebSocket may still work: \(error)")
+                        
+                        // Try to reconnect WebSocket with the other token
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            (self.chatService as? ChatNetworkService)?.reconnectToChat(bookingId: bookingId)
+                        }
+                    } else {
+                        self.errorMessage = "Failed to load message history. Tap to retry."
+                        print("⚠️ Error loading messages, but WebSocket may still work: \(error)")
+                    }
+                    
+                    // Force UI update
+                    self.objectWillChange.send()
                 }
             }
         }
+    }
+    
+    private func retryConnection(bookingId: Int) {
+        connectionAttempts += 1
         
-        // Connect to WebSocket for real-time updates
-        chatService.connectToChat(bookingId: bookingId)
+        if connectionAttempts <= maxConnectionAttempts {
+            print("🔄 Retry attempt \(connectionAttempts) of \(maxConnectionAttempts)")
+            connectionState = .reconnecting
+            
+            // Disconnect and reconnect
+            chatService.disconnectFromChat()
+            
+            // Wait a moment before reconnecting
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+                guard let self = self, self.bookingId == bookingId else { return }
+                
+                // Try connecting again
+                self.chatService.connectToChat(bookingId: bookingId)
+                
+                // Retry loading messages
+                self.loadMessageHistory(bookingId: bookingId)
+                
+                // Check connection state after a delay
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                    guard let self = self, self.bookingId == bookingId else { return }
+                    
+                    if self.chatService.isConnected() {
+                        self.connectionState = .connected
+                        self.objectWillChange.send()
+                    } else if self.connectionAttempts < self.maxConnectionAttempts {
+                        self.retryConnection(bookingId: bookingId)
+                    } else {
+                        self.connectionState = .error
+                        self.errorMessage = "Failed to connect after multiple attempts. Tap to retry."
+                        self.objectWillChange.send()
+                    }
+                }
+            }
+        } else {
+            connectionState = .error
+            errorMessage = "Connection failed after \(maxConnectionAttempts) attempts. Tap to retry."
+            objectWillChange.send()
+        }
+    }
+    
+    // Method to handle retry taps
+    func retryConnection() {
+        guard let bookingId = self.bookingId else { return }
+        
+        print("🔄 Manual retry requested")
+        connectionAttempts = 0
+        isLoading = true
+        errorMessage = nil
+        connectionState = .connecting
+        
+        // Force UI update
+        objectWillChange.send()
+        
+        // Retry connection
+        chatService.disconnectFromChat()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self = self else { return }
+            self.loadChat(forBookingId: bookingId)
+        }
     }
     
     func sendMessage() {
@@ -83,6 +267,7 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
                 print("📤 Error sending message: \(error)")
                 DispatchQueue.main.async {
                     self?.errorMessage = "Failed to send: \(error.localizedDescription)"
+                    self?.objectWillChange.send()
                 }
             }
         }
@@ -90,6 +275,7 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
     
     func disconnect() {
         chatService.disconnectFromChat()
+        connectionState = .disconnected
     }
     
     // MARK: - ChatMessageDelegate
@@ -134,6 +320,9 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
             let count = self.messages.count
             self.objectWillChange.send()
             print("📥 Updated messages array, now contains \(count) messages")
+            
+            // Call the callback with the new message count
+            self.onMessagesUpdated?(count)
         }
     }
     

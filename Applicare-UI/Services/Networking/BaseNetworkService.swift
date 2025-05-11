@@ -13,6 +13,12 @@ class BaseNetworkService: NetworkServiceProtocol {
     // Private initialization to enforce singleton pattern
     private init() {}
     
+    // Flag to track if a token refresh is in progress to prevent multiple simultaneous refresh attempts
+    private var isRefreshingToken = false
+    
+    // Queue of pending requests waiting for token refresh
+    private var pendingRequests: [(APIEndpointProtocol, Encodable?, Any)] = []
+    
     /// Perform a network request that returns a decodable object
     /// - Parameters:
     ///   - endpoint: The API endpoint to request
@@ -37,21 +43,21 @@ class BaseNetworkService: NetworkServiceProtocol {
         
         // Add authentication header if needed
         if endpoint.requiresAuthentication {
+            // Check if token is expired (implemented in AuthNetworkService)
+            let isTokenExpired = isCurrentTokenExpired()
+            
+            // If token is expired, try to refresh it before making the request
+            if isTokenExpired {
+                enqueueRequestForTokenRefresh(endpoint, body: body, completion: completion)
+                return
+            }
+            
             // Get the active token - prioritize repairer token if logged in as repairer
             let token = AuthNetworkService.shared.getRepairerToken() ?? AuthNetworkService.shared.getToken()
             
             // If no token and authentication is required, try to refresh
             if token == nil {
-                // Try to refresh the token first
-                tryRefreshToken { [weak self] refreshResult in
-                    switch refreshResult {
-                    case .success:
-                        // Retry the original request with the new token
-                        self?.request(endpoint, body: body, completion: completion)
-                    case .failure(let error):
-                        completion(.failure(error))
-                    }
-                }
+                enqueueRequestForTokenRefresh(endpoint, body: body, completion: completion)
                 return
             }
             
@@ -64,6 +70,108 @@ class BaseNetworkService: NetworkServiceProtocol {
         }
         
         performRequest(endpoint, body: body, originalRequest: endpoint, originalBody: body, completion: completion)
+    }
+    
+    // Helper method to check if current token is expired
+    private func isCurrentTokenExpired() -> Bool {
+        // Check repairer token first, then user token
+        if AuthNetworkService.shared.isRepairerLoggedIn(), 
+           let expiry = UserDefaults.standard.object(forKey: "repairerTokenExpiry") as? Date,
+           expiry < Date() {
+            return true
+        }
+        
+        if AuthNetworkService.shared.isUserLoggedIn(),
+           let expiry = UserDefaults.standard.object(forKey: "authTokenExpiry") as? Date,
+           expiry < Date() {
+            return true
+        }
+        
+        return false
+    }
+    
+    // Helper method to queue requests that need to wait for token refresh
+    private func enqueueRequestForTokenRefresh<T: Decodable>(_ endpoint: APIEndpointProtocol, body: Encodable? = nil, completion: @escaping (Result<T, NetworkError>) -> Void) {
+        // Add request to pending queue
+        pendingRequests.append((endpoint, body, completion as Any))
+        
+        // If already refreshing, just queue the request
+        if isRefreshingToken {
+            return
+        }
+        
+        // Set refreshing flag and start the refresh
+        isRefreshingToken = true
+        
+        // Try to refresh the token
+        tryRefreshToken { [weak self] refreshResult in
+            guard let self = self else { return }
+            
+            // Mark refresh as complete
+            self.isRefreshingToken = false
+            
+            switch refreshResult {
+            case .success:
+                // Process all pending requests with new token
+                self.processPendingRequests()
+            case .failure(let error):
+                // Fail all pending requests with the same error
+                self.failAllPendingRequests(with: error)
+            }
+        }
+    }
+    
+    // Process all pending requests after token refresh
+    private func processPendingRequests() {
+        let requests = pendingRequests
+        pendingRequests = []
+        
+        for (endpoint, body, completion) in requests {
+            if let completionHandler = completion as? (Result<Void, NetworkError>) -> Void {
+                request(endpoint, body: body, completion: completionHandler)
+            } else {
+                // For non-Void completion handlers, we need to use correct generic type
+                performGenericRequest(endpoint, body: body, completion: completion)
+            }
+        }
+    }
+    
+    // Helper method to handle generic request types
+    private func performGenericRequest(_ endpoint: APIEndpointProtocol, body: Encodable?, completion: Any) {
+        // Since we can't know the exact type at runtime, we need to handle failure cases at minimum
+        if let completionHandler = completion as? (Result<Void, NetworkError>) -> Void {
+            // Already handled in the calling method, but double-check
+            request(endpoint, body: body, completion: completionHandler)
+        } else {
+            // For any other type, we'll make a request with a flexible JSON structure
+            // and then fail the original completion with a custom error if needed
+            request(endpoint, body: body) { (result: Result<EmptyResponse, NetworkError>) in
+                if case .failure(let error) = result {
+                    // Try to pass the error to the original completion
+                    if let anyCompletion = completion as? ((Result<Any, NetworkError>) -> Void) {
+                        anyCompletion(.failure(error))
+                    } else {
+                        print("Warning: Unable to pass error to completion handler of unknown type")
+                    }
+                } else {
+                    print("Request succeeded but handler type mismatch - implement specific type handling if needed")
+                }
+            }
+        }
+    }
+    
+    // Fail all pending requests with the same error
+    private func failAllPendingRequests(with error: NetworkError) {
+        let requests = pendingRequests
+        pendingRequests = []
+        
+        for (_, _, completion) in requests {
+            if let completionHandler = completion as? (Result<Void, NetworkError>) -> Void {
+                completionHandler(.failure(error))
+            } else if let completionHandler = completion as? (Result<Any, NetworkError>) -> Void {
+                completionHandler(.failure(error))
+            }
+        }
     }
     
     // Helper method to perform the actual network request

@@ -9,7 +9,7 @@ struct SimpleChatView: View {
     @StateObject private var viewModel = ChatViewModel()
     @Environment(\.presentationMode) var presentationMode
     
-    // Add state for message count to force view refresh
+    // State variable no longer needed
     @State private var messageCount: Int = 0
     @State private var scrollToBottom: Bool = false
     
@@ -40,84 +40,127 @@ struct SimpleChatView: View {
             .padding()
             .background(Color.blue.opacity(0.2))
             
-            // Debug information
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Debug Info")
-                    .font(.headline)
-                    .foregroundColor(.red)
-                
-                Text("Booking #\(booking.id)")
-                Text("Status: \(booking.status)")
-                Text("Loading: \(viewModel.isLoading ? "Yes" : "No")")
-                Text("Messages count: \(viewModel.messages.count)")
-                
-                if let error = viewModel.errorMessage {
-                    Text("Error: \(error)")
-                        .foregroundColor(.red)
-                }
-            }
-            .padding()
-            .background(Color.yellow.opacity(0.3))
-            .cornerRadius(8)
-            .padding(.horizontal)
+//            // Debug information
+//            VStack(alignment: .leading, spacing: 4) {
+//                Text("Debug Info")
+//                    .font(.headline)
+//                    .foregroundColor(.red)
+//                
+//                Text("Booking #\(booking.id)")
+//                Text("Status: \(booking.status)")
+//                Text("Loading: \(viewModel.isLoading ? "Yes" : "No")")
+//                Text("Messages count: \(viewModel.messages.count)")
+//                Text("Connection: \(viewModel.connectionState.rawValue)")
+//                
+//                if let error = viewModel.errorMessage {
+//                    Text("Error: \(error)")
+//                        .foregroundColor(.red)
+//                        .onTapGesture {
+//                            viewModel.retryConnection()
+//                        }
+//                }
+//            }
+//            .padding()
+//            .background(Color.yellow.opacity(0.3))
+//            .cornerRadius(8)
+//            .padding(.horizontal)
             
-            // Message list with ScrollViewReader
-            ScrollViewReader { proxy in
-                ScrollView {
-                    VStack(spacing: 12) {
-                        if viewModel.isLoading {
-                            ProgressView("Loading messages...")
-                                .padding()
-                        } else if viewModel.messages.isEmpty {
-                            Text("No messages")
+            // Message list with INVERTED scroll approach
+            ScrollView {
+                VStack(spacing: 12) {
+                    // Show messages in reverse order due to the flip
+                    if !viewModel.messages.isEmpty {
+                        ForEach(viewModel.messages.reversed()) { message in
+                            MessageRow(message: message)
+                                .id(message.id)
+                                // Counteract the scroll view rotation
+                                .rotationEffect(.degrees(180))
+                        }
+                    } else if viewModel.isLoading {
+                        ProgressView("Loading messages...")
+                            .padding()
+                            .rotationEffect(.degrees(180))
+                    } else if viewModel.connectionState == .connected {
+                        Text("No messages")
+                            .foregroundColor(.gray)
+                            .padding()
+                            .rotationEffect(.degrees(180))
+                    } else if viewModel.connectionState == .connecting || viewModel.connectionState == .reconnecting {
+                        VStack(spacing: 8) {
+                            ProgressView()
+                                .padding(.bottom, 10)
+                            Text("Establishing connection...")
                                 .foregroundColor(.gray)
-                                .padding()
-                        } else {
-                            ForEach(viewModel.messages) { message in
-                                MessageRow(message: message)
-                                    .id(message.id)
+                        }
+                        .padding()
+                        .rotationEffect(.degrees(180))
+                    } else {
+                        Button(action: {
+                            viewModel.retryConnection()
+                        }) {
+                            VStack(spacing: 8) {
+                                Text("Connection issue")
+                                    .foregroundColor(.red)
+                                Text("Tap to retry")
+                                    .font(.caption)
+                                    .foregroundColor(.blue)
+                                Image(systemName: "arrow.clockwise")
+                                    .foregroundColor(.blue)
+                                    .padding(8)
                             }
-                            
-                            // Invisible marker at bottom for scrolling
-                            Color.clear
-                                .frame(height: 1)
-                                .id("bottomID")
+                            .padding()
+                            .background(Color.red.opacity(0.1))
+                            .cornerRadius(12)
                         }
-                    }
-                    .padding(.vertical)
-                }
-                .onChange(of: viewModel.messages.count) { _, newCount in
-                    // Detect when messages are added
-                    if newCount > messageCount {
-                        messageCount = newCount
-                        print("🟢 Message count changed: \(messageCount)")
-                        
-                        // Scroll to bottom when new messages arrive
-                        withAnimation {
-                            proxy.scrollTo("bottomID", anchor: .bottom)
-                        }
+                        .padding()
+                        .rotationEffect(.degrees(180))
                     }
                 }
-                .onAppear {
-                    // Initial message count
-                    messageCount = viewModel.messages.count
-                    
-                    // Initial scroll to bottom
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation {
-                            proxy.scrollTo("bottomID", anchor: .bottom)
-                        }
-                    }
-                }
+                .padding(.vertical)
             }
-            .id(viewModel.messages.count) // Force view refresh when message count changes
+            // This rotation effect is the key to the inverted scroll
+            .rotationEffect(.degrees(180))
             
-            // Input field
+            // Connection status indicator
+            if viewModel.connectionState != .connected {
+                HStack {
+                    Circle()
+                        .fill(connectionStatusColor)
+                        .frame(width: 10, height: 10)
+                    Text(viewModel.connectionState.rawValue)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        viewModel.retryConnection()
+                    }) {
+                        HStack(spacing: 4) {
+                            Text("Retry")
+                                .font(.caption)
+                            Image(systemName: "arrow.clockwise")
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.vertical, 8)
+                .background(Color.gray.opacity(0.1))
+                .padding(.horizontal)
+            }
+            
+            // Input field with clear connection state indication
             HStack {
                 TextField("Type a message", text: $viewModel.messageText)
                     .padding(8)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(8)
+                    .disabled(viewModel.connectionState != .connected)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(viewModel.connectionState == .connected ? Color.clear : Color.gray.opacity(0.3), lineWidth: 1)
+                    )
                 
                 Button(action: {
                     viewModel.sendMessage()
@@ -125,10 +168,12 @@ struct SimpleChatView: View {
                     Image(systemName: "paperplane.fill")
                         .foregroundColor(.white)
                         .padding(8)
-                        .background(Color.blue)
+                        .background(viewModel.connectionState == .connected ? Color.blue : Color.gray)
                         .clipShape(Circle())
                 }
-                .disabled(viewModel.messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .disabled(viewModel.messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || 
+                          viewModel.connectionState != .connected)
+                .opacity(viewModel.connectionState == .connected ? 1.0 : 0.6)
             }
             .padding()
         }
@@ -140,6 +185,18 @@ struct SimpleChatView: View {
         .onDisappear {
             print("🟢 SimpleChatView disappeared")
             viewModel.disconnect()
+        }
+    }
+    
+    // Helper for connection status color
+    private var connectionStatusColor: Color {
+        switch viewModel.connectionState {
+        case .connected:
+            return Color.green
+        case .connecting, .reconnecting:
+            return Color.orange
+        case .disconnected, .error, .authError:
+            return Color.red
         }
     }
 }
@@ -177,17 +234,8 @@ struct MessageRow: View {
 struct SimpleChatView_Previews: PreviewProvider {
     static var previews: some View {
         SimpleChatView(
-            booking: Booking(
-                id: 1,
-                repairer_id: 123,
-                service_id: 456,
-                start_time: "2023-12-20T08:00:00.000Z",
-                end_time: "2023-12-20T10:00:00.000Z",
-                status: "confirmed",
-                address: "123 Main St",
-                notes: "Please bring tools for a leaky faucet repair",
-                created_at: "2023-12-15T09:30:00.000Z",
-                updated_at: "2023-12-15T09:30:00.000Z"
+            booking: Booking.sampleBooking(
+                repairer_note: "This is a recurring customer with similar issues"
             ),
             contactName: "John Smith"
         )

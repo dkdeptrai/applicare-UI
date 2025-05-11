@@ -39,6 +39,9 @@ class BookingsViewModel: ObservableObject {
     
     // Get repairer name - in a real app, you would fetch this from a proper source
     func repairerName(for booking: Booking) -> String {
+        if let repairer = booking.repairer {
+            return repairer.name
+        }
         return "Repairer #\(booking.repairer_id)"
     }
     
@@ -61,24 +64,22 @@ class BookingsViewModel: ObservableObject {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         
         if let date = dateFormatter.date(from: dateString) {
-            let displayFormatter = DateFormatter()
-            displayFormatter.dateFormat = "h:mm a"
-            return displayFormatter.string(from: date)
+            let timeFormatter = DateFormatter()
+            timeFormatter.dateFormat = "h:mm a"
+            return timeFormatter.string(from: date)
         }
         return "Unknown time"
     }
     
-    // Get appropriate status color
+    // Get color for a booking status
     func statusColor(for status: String) -> Color {
         switch status.lowercased() {
         case "pending":
-            return .blue
+            return .orange
         case "confirmed":
             return .green
-        case "in_progress":
-            return .orange
         case "completed":
-            return .purple
+            return .blue
         case "cancelled":
             return .red
         default:

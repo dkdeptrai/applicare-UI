@@ -36,7 +36,19 @@ struct Message: Codable, Identifiable, Hashable {
            sender_type == "User" && sender_id == currentUserId {
             return true
         }
+        
+        // Check if the current user is a repairer
+        if let currentRepairerId = AuthNetworkService.shared.getRepairerId(),
+           sender_type == "Repairer" && sender_id == currentRepairerId {
+            return true
+        }
+        
         return false
+    }
+    
+    // Determine if message is from a repairer (for repairer chat view)
+    func isFromRepairer() -> Bool {
+        return sender_type == "Repairer"
     }
     
     // Computed property to format the date/time

@@ -55,11 +55,17 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        if let token = AuthNetworkService.shared.getToken() {
+        // Try to get either repairer token or user token
+        let repairerToken = AuthNetworkService.shared.getRepairerToken()
+        let userToken = AuthNetworkService.shared.getToken()
+        
+        if let token = repairerToken ?? userToken {
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
             print("✅ Using token: \(token)")
         } else {
             print("❌ No auth token available")
+            completion(.failure(.unauthorized))
+            return
         }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
@@ -81,6 +87,66 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
             
             print("📡 Response status code: \(httpResponse.statusCode)")
             
+            // If the first token failed with 401, try the other token
+            if httpResponse.statusCode == 401 {
+                print("⚠️ First token unauthorized, trying alternate token")
+                
+                // If we used repairer token first, now try user token, or vice versa
+                let alternateToken = (repairerToken != nil) ? userToken : repairerToken
+                
+                if let token = alternateToken {
+                    print("✅ Trying alternate token: \(token)")
+                    var newRequest = URLRequest(url: url)
+                    newRequest.httpMethod = "GET"
+                    newRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                    
+                    URLSession.shared.dataTask(with: newRequest) { retryData, retryResponse, retryError in
+                        if let retryError = retryError {
+                            print("❌ Retry network error: \(retryError.localizedDescription)")
+                            DispatchQueue.main.async {
+                                completion(.failure(.requestFailed))
+                            }
+                            return
+                        }
+                        
+                        guard let retryHttpResponse = retryResponse as? HTTPURLResponse else {
+                            print("❌ Invalid retry response")
+                            DispatchQueue.main.async {
+                                completion(.failure(.invalidResponse))
+                            }
+                            return
+                        }
+                        
+                        if !(200...299).contains(retryHttpResponse.statusCode) {
+                            print("❌ Retry error status code: \(retryHttpResponse.statusCode)")
+                            DispatchQueue.main.async {
+                                completion(.failure(NetworkError(statusCode: retryHttpResponse.statusCode, message: nil)))
+                            }
+                            return
+                        }
+                        
+                        guard let retryData = retryData else {
+                            print("❌ No retry data received")
+                            DispatchQueue.main.async {
+                                completion(.failure(.requestFailed))
+                            }
+                            return
+                        }
+                        
+                        // Process successful retry response
+                        self.processMessagesResponse(retryData, completion: completion)
+                        
+                    }.resume()
+                    return
+                } else {
+                    print("❌ No alternate token available")
+                    DispatchQueue.main.async {
+                        completion(.failure(.unauthorized))
+                    }
+                    return
+                }
+            }
+            
             if !(200...299).contains(httpResponse.statusCode) {
                 print("❌ Error status code: \(httpResponse.statusCode)")
                 DispatchQueue.main.async {
@@ -97,30 +163,44 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
                 return
             }
             
-            // Print raw JSON for debugging
-            if let jsonString = String(data: data, encoding: .utf8) {
-                print("📦 Raw JSON response: \(jsonString)")
-            }
+            // Process successful response
+            self.processMessagesResponse(data, completion: completion)
             
-            do {
-                let decoder = JSONDecoder()
-                let messages = try decoder.decode([Message].self, from: data)
-                print("✅ Successfully decoded \(messages.count) messages")
-                
-                DispatchQueue.main.async {
-                    completion(.success(messages))
-                }
-            } catch {
-                print("❌ Decoding error: \(error)")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(.decodingFailed))
-                }
-            }
         }.resume()
     }
     
+    // Helper to process message response data
+    private func processMessagesResponse(_ data: Data, completion: @escaping (Result<[Message], NetworkError>) -> Void) {
+        // Print raw JSON for debugging
+        if let jsonString = String(data: data, encoding: .utf8) {
+            print("📦 Raw JSON response: \(jsonString)")
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            let messages = try decoder.decode([Message].self, from: data)
+            print("✅ Successfully decoded \(messages.count) messages")
+            
+            DispatchQueue.main.async {
+                completion(.success(messages))
+            }
+        } catch {
+            print("❌ Decoding error: \(error)")
+            
+            DispatchQueue.main.async {
+                completion(.failure(.decodingFailed))
+            }
+        }
+    }
+    
     func sendMessage(bookingId: Int, content: String, completion: @escaping (Result<Void, NetworkError>) -> Void) {
+        // Verify we have a token before attempting to send
+        guard AuthNetworkService.shared.getRepairerToken() != nil || AuthNetworkService.shared.getToken() != nil else {
+            print("❌ Cannot send message: No authentication token available")
+            completion(.failure(.unauthorized))
+            return
+        }
+        
         let requestDTO = SendMessageRequestDTO(
             message: SendMessageRequestDTO.MessageContent(content: content),
             booking_id: bookingId
@@ -134,11 +214,34 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
         // Save booking ID for subscription
         self.currentBookingId = bookingId
         
-        // Get auth token
-        guard let token = AuthNetworkService.shared.getToken() else {
-            print("❌ Error: No auth token available for WebSocket connection")
+        // Try to connect using repairer token first, then fall back to user token if needed
+        connectWithToken(bookingId: bookingId, useRepairerToken: true)
+    }
+    
+    private func connectWithToken(bookingId: Int, useRepairerToken: Bool) {
+        // Get the appropriate token
+        let token: String?
+        if useRepairerToken {
+            token = AuthNetworkService.shared.getRepairerToken()
+            print("🔌 Attempting WebSocket connection with repairer token")
+        } else {
+            token = AuthNetworkService.shared.getToken()
+            print("🔌 Attempting WebSocket connection with user token")
+        }
+        
+        guard let token = token else {
+            print("❌ Error: No \(useRepairerToken ? "repairer" : "user") token available for WebSocket connection")
+            
+            // If we tried repairer token and failed, try user token next
+            if useRepairerToken && AuthNetworkService.shared.getToken() != nil {
+                print("🔄 Trying WebSocket connection with user token instead")
+                connectWithToken(bookingId: bookingId, useRepairerToken: false)
+            }
             return
         }
+        
+        // Disconnect existing connection if any
+        disconnectFromChat()
         
         // Create WebSocket URL
         let serverURL = APIEndpoint.baseURL.replacingOccurrences(of: "http://", with: "ws://")
@@ -159,9 +262,19 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
         
         // Subscribe to the channel after a short delay to ensure connection is established
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            self.subscribeToChannel(bookingId: bookingId)
-            self.ping() // Start ping cycle
+            guard let strongSelf = self else { return }
+            
+            if !strongSelf.isConnected() {
+                // If connection failed with this token, try the other token
+                if useRepairerToken && AuthNetworkService.shared.getToken() != nil {
+                    print("🔄 WebSocket connection with repairer token failed, trying user token")
+                    strongSelf.connectWithToken(bookingId: bookingId, useRepairerToken: false)
+                }
+                return
+            }
+            
+            strongSelf.subscribeToChannel(bookingId: bookingId)
+            strongSelf.ping() // Start ping cycle
         }
     }
     
@@ -545,16 +658,34 @@ class ChatNetworkService: NSObject, ChatNetworkServiceProtocol {
         }
     }
     
-    // Force reconnection to the chat channel
+    // Reconnect to chat websocket
     func reconnectToChat(bookingId: Int) {
-        print("🔄 Forcing WebSocket reconnection for booking #\(bookingId)")
+        // First disconnect if connected
+        disconnectFromChat()
         
-        // Disconnect first
-        self.disconnectFromChat()
-        
-        // Wait a moment before reconnecting
+        // Wait a moment and then reconnect
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.connectToChat(bookingId: bookingId)
+            guard let strongSelf = self else { return }
+            
+            // Store current booking ID before reconnecting
+            strongSelf.currentBookingId = bookingId
+            
+            // Retry connection with alternating tokens to ensure best chance of success
+            let useRepairerToken = AuthNetworkService.shared.getRepairerToken() != nil
+            
+            print("🔄 Reconnecting to chat WebSocket for booking #\(bookingId), using \(useRepairerToken ? "repairer" : "user") token first")
+            strongSelf.connectWithToken(bookingId: bookingId, useRepairerToken: useRepairerToken)
+            
+            // Schedule another reconnection attempt after delay if this one fails
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+                guard let strongSelf = self else { return }
+                
+                // If we still don't have a connection, try one more time with the opposite token preference
+                if !strongSelf.isConnected() && strongSelf.currentBookingId == bookingId {
+                    print("⚠️ First reconnection attempt failed, trying again with alternate token preference")
+                    strongSelf.connectWithToken(bookingId: bookingId, useRepairerToken: !useRepairerToken)
+                }
+            }
         }
     }
 } 

@@ -5,6 +5,12 @@
 
 import Foundation
 
+// MARK: - Notification Names
+extension Notification.Name {
+    static let userReauthenticationRequired = Notification.Name("UserReauthenticationRequired")
+    static let repairerReauthenticationRequired = Notification.Name("RepairerReauthenticationRequired")
+}
+
 /// Protocol defining the authentication service functionality
 protocol AuthNetworkServiceProtocol {
     func login(loginRequest: LoginRequestDTO, completion: @escaping (Result<LoginResponseDTO, NetworkError>) -> Void)
@@ -84,13 +90,14 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         if authToken == nil {
             authToken = UserDefaults.standard.string(forKey: "authToken")
             authTokenExpiry = UserDefaults.standard.object(forKey: "authTokenExpiry") as? Date
-            
-            // If token is expired and we have a refresh token, attempt to refresh
-            if let expiry = authTokenExpiry, expiry < Date(), getRefreshToken() != nil {
-                refreshToken { _ in }  // Fire and forget
-                return nil // Return nil to force using the refresh flow
-            }
         }
+        
+        // Check if token is expired
+        if let expiry = authTokenExpiry, expiry < Date() {
+            // Return nil to trigger token refresh flow
+            return nil
+        }
+        
         return authToken
     }
     
@@ -152,13 +159,14 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         if repairerAuthToken == nil {
             repairerAuthToken = UserDefaults.standard.string(forKey: "repairerAuthToken")
             repairerTokenExpiry = UserDefaults.standard.object(forKey: "repairerTokenExpiry") as? Date
-            
-            // If token is expired and we have a refresh token, attempt to refresh
-            if let expiry = repairerTokenExpiry, expiry < Date(), getRepairerRefreshToken() != nil {
-                refreshToken { _ in }  // Fire and forget
-                return nil // Return nil to force using the refresh flow
-            }
         }
+        
+        // Check if token is expired
+        if let expiry = repairerTokenExpiry, expiry < Date() {
+            // Return nil to trigger token refresh flow
+            return nil
+        }
+        
         return repairerAuthToken
     }
     
@@ -219,9 +227,17 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
         
         let requestDTO = TokenRefreshRequestDTO(refresh_token: token)
         
+        #if DEBUG
+        print("🔄 Refreshing token: \(isRepairerRefresh ? "Repairer" : "User")")
+        #endif
+        
         networkService.request(APIEndpoint.refreshToken, body: requestDTO) { [weak self] (result: Result<TokenRefreshResponseDTO, NetworkError>) in
             switch result {
             case .success(let response):
+                #if DEBUG
+                print("✅ Token refresh successful. New token expires in \(response.expires_in) seconds")
+                #endif
+                
                 // Update the appropriate token storage
                 if isRepairerRefresh, let repairerId = self?.getRepairerId() {
                     self?.setRepairerAuthData(
@@ -240,6 +256,10 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
                 }
                 completion(.success(response))
             case .failure(let error):
+                #if DEBUG
+                print("❌ Token refresh failed: \(error.localizedDescription)")
+                #endif
+                
                 // If refresh fails, might need to re-authenticate
                 if case .unauthorized = error {
                     // Clear tokens but keep IDs for now
@@ -254,6 +274,12 @@ class AuthNetworkService: AuthNetworkServiceProtocol {
                         UserDefaults.standard.removeObject(forKey: "authToken")
                         UserDefaults.standard.removeObject(forKey: "authRefreshToken")
                     }
+                    
+                    // Post notification for authentication required
+                    NotificationCenter.default.post(
+                        name: isRepairerRefresh ? .repairerReauthenticationRequired : .userReauthenticationRequired,
+                        object: nil
+                    )
                 }
                 completion(.failure(error))
             }

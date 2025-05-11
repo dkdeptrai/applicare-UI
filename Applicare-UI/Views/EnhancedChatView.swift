@@ -59,42 +59,87 @@ struct EnhancedChatView: View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // DEBUG INFORMATION
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("DEBUG INFO")
-                                .font(.headline)
-                                .foregroundColor(.red)
-                                .padding(5)
-                                .background(Color.yellow)
-                            
-                            Text("Booking ID: \(booking.id)")
-                            Text("Status: \(booking.status)")
-                            Text("Message count: \(viewModel.messages.count)")
-                            Text("Is loading: \(viewModel.isLoading ? "Yes" : "No")")
-                            
-                            if let error = viewModel.errorMessage {
-                                Text("Error: \(error)")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+//                        // DEBUG INFORMATION
+//                        VStack(alignment: .leading, spacing: 8) {
+//                            Text("DEBUG INFO")
+//                                .font(.headline)
+//                                .foregroundColor(.red)
+//                                .padding(5)
+//                                .background(Color.yellow)
+//                            
+//                            Text("Booking ID: \(booking.id)")
+//                            Text("Status: \(booking.status)")
+//                            Text("Message count: \(viewModel.messages.count)")
+//                            Text("Is loading: \(viewModel.isLoading ? "Yes" : "No")")
+//                            Text("Connection: \(viewModel.connectionState.rawValue)")
+//                            
+//                            if let error = viewModel.errorMessage {
+//                                Text("Error: \(error)")
+//                                    .foregroundColor(.red)
+//                                Button("Retry Connection") {
+//                                    viewModel.retryConnection()
+//                                }
+//                                .font(.caption)
+//                                .padding(.vertical, 4)
+//                                .padding(.horizontal, 10)
+//                                .background(Color.blue)
+//                                .foregroundColor(.white)
+//                                .cornerRadius(20)
+//                            }
+//                        }
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .padding()
+//                        .background(Color.gray.opacity(0.1))
+//                        .cornerRadius(10)
+//                        .padding(.horizontal)
                         
                         // Booking status card
                         bookingStatusCard
                             .padding(.horizontal)
+                        
+                        // Connection status if not connected
+                        if viewModel.connectionState != .connected {
+                            connectionStatusView
+                                .padding(.horizontal)
+                        }
                         
                         // Messages area
                         if viewModel.isLoading {
                             ProgressView("Loading messages...")
                                 .padding()
                         } else if viewModel.messages.isEmpty {
-                            Text("No messages yet")
-                                .foregroundColor(.gray)
+                            if viewModel.connectionState == .connected {
+                                Text("No messages yet")
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            } else if viewModel.connectionState == .connecting || viewModel.connectionState == .reconnecting {
+                                VStack(spacing: 8) {
+                                    ProgressView()
+                                        .padding(.bottom, 10)
+                                    Text("Establishing connection...")
+                                        .foregroundColor(.gray)
+                                }
                                 .padding()
+                            } else {
+                                Button(action: {
+                                    viewModel.retryConnection()
+                                }) {
+                                    VStack(spacing: 8) {
+                                        Text("Connection issue")
+                                            .foregroundColor(.red)
+                                        Text("Tap to retry")
+                                            .font(.caption)
+                                            .foregroundColor(.blue)
+                                        Image(systemName: "arrow.clockwise")
+                                            .foregroundColor(.blue)
+                                            .padding(8)
+                                    }
+                                    .padding()
+                                    .background(Color.red.opacity(0.1))
+                                    .cornerRadius(12)
+                                }
+                                .padding()
+                            }
                         } else {
                             messagesView
                         }
@@ -104,6 +149,7 @@ struct EnhancedChatView: View {
                     }
                     .padding(.bottom, 10)
                 }
+                .id("\(viewModel.messages.count)-\(viewModel.connectionState)") // Force view refresh when state changes
                 
                 // Message input area
                 messageInputField
@@ -121,6 +167,48 @@ struct EnhancedChatView: View {
     }
     
     // MARK: - View Components
+    
+    private var connectionStatusView: some View {
+        HStack {
+            Circle()
+                .fill(connectionStatusColor)
+                .frame(width: 10, height: 10)
+            Text(viewModel.connectionState.rawValue)
+                .font(.subheadline)
+                .foregroundColor(.gray)
+            
+            Spacer()
+            
+            Button(action: {
+                viewModel.retryConnection()
+            }) {
+                HStack {
+                    Text("Retry")
+                        .font(.caption)
+                    Image(systemName: "arrow.clockwise")
+                }
+                .padding(.vertical, 4)
+                .padding(.horizontal, 10)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(20)
+            }
+        }
+        .padding()
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(10)
+    }
+    
+    private var connectionStatusColor: Color {
+        switch viewModel.connectionState {
+        case .connected:
+            return Color.green
+        case .connecting, .reconnecting:
+            return Color.orange
+        case .disconnected, .error, .authError:
+            return Color.red
+        }
+    }
     
     private var bookingStatusCard: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -159,21 +247,30 @@ struct EnhancedChatView: View {
     
     private var messageInputField: some View {
         HStack {
-            TextField("Type a message...", text: $viewModel.messageText)
-                .padding(10)
+            TextField("Type a message", text: $viewModel.messageText)
+                .padding(12)
                 .background(Color(UIColor.secondarySystemBackground))
                 .cornerRadius(20)
+                .disabled(viewModel.connectionState != .connected)
             
             Button(action: {
                 viewModel.sendMessage()
             }) {
                 Image(systemName: "paperplane.fill")
-                    .foregroundColor(.blue)
+                    .foregroundColor(.white)
                     .padding(10)
+                    .background(
+                        Circle()
+                            .fill(viewModel.connectionState == .connected ? Color.blue : Color.gray)
+                    )
             }
-            .disabled(viewModel.messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            .disabled(viewModel.messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || 
+                     viewModel.connectionState != .connected)
+            .padding(.leading, 8)
         }
-        .padding([.horizontal, .bottom])
+        .padding()
+        .background(Color(UIColor.systemBackground))
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
     }
     
     // MARK: - Helper Functions
@@ -207,17 +304,8 @@ struct EnhancedChatView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             EnhancedChatView(
-                booking: Booking(
-                    id: 1,
-                    repairer_id: 123,
-                    service_id: 456,
-                    start_time: "2023-12-20T08:00:00.000Z",
-                    end_time: "2023-12-20T10:00:00.000Z",
-                    status: "confirmed",
-                    address: "123 Main St",
-                    notes: "Please bring tools for a leaky faucet repair",
-                    created_at: "2023-12-15T09:30:00.000Z",
-                    updated_at: "2023-12-15T09:30:00.000Z"
+                booking: Booking.sampleBooking(
+                    repairer_note: "Need to check water pressure in this area"
                 ),
                 contactName: "Ricardo"
             )

@@ -8,8 +8,11 @@ struct RepairerHomeView: View {
     @State private var errorMessage: String? = nil
     @State private var filterStatus: String? = nil
     @State private var showingAddNoteSheet = false
+    @State private var showingChatSheet = false
     @State private var selectedBookingId: Int? = nil
+    @State private var selectedBooking: Booking? = nil
     @State private var noteText: String = ""
+    @State private var navigateToChat = false
     
     private let bookingService = BookingNetworkService.shared
     
@@ -136,49 +139,80 @@ struct RepairerHomeView: View {
                 } else {
                     List {
                         ForEach(bookings) { booking in
-                            BookingRow(booking: booking)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
+                            BookingRow(
+                                booking: booking, 
+                                onAddNote: {
                                     selectedBookingId = booking.id
+                                    // Pre-populate with existing repairer notes if available
+                                    if let existingNotes = booking.repairer_note {
+                                        noteText = existingNotes
+                                    } else {
+                                        noteText = ""
+                                    }
                                     showingAddNoteSheet = true
-                                }
-                                .swipeActions(edge: .trailing) {
-                                    if booking.status.lowercased() == "pending" {
-                                        // Accept button
-                                        Button {
-                                            updateBookingStatus(id: booking.id, status: "confirmed")
-                                        } label: {
-                                            Label("Accept", systemImage: "checkmark")
-                                        }
-                                        .tint(.green)
-                                        
-                                        // Reject button
-                                        Button {
-                                            updateBookingStatus(id: booking.id, status: "cancelled")
-                                        } label: {
-                                            Label("Reject", systemImage: "xmark")
-                                        }
-                                        .tint(.red)
-                                    } else if booking.status.lowercased() == "confirmed" {
-                                        // Complete button
-                                        Button {
-                                            updateBookingStatus(id: booking.id, status: "completed")
-                                        } label: {
-                                            Label("Complete", systemImage: "checkmark.circle")
-                                        }
-                                        .tint(.blue)
+                                }, 
+                                onOpenChat: {
+                                    selectedBooking = booking
+                                    print("Setting selectedBooking to #\(booking.id)")
+                                    navigateToChat = true
+                                    print("Set navigateToChat to true")
+                                },
+                                onRowTap: {
+                                    // Open full booking details instead of just add note
+                                    selectedBooking = booking
+                                    if let existingNotes = booking.repairer_note {
+                                        noteText = existingNotes
+                                    } else {
+                                        noteText = ""
                                     }
+                                    // Future enhancement: Show detailed booking view instead
                                 }
-                                .swipeActions(edge: .leading) {
-                                    // Add note button
+                            )
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .swipeActions(edge: .trailing) {
+                                if booking.status.lowercased() == "pending" {
+                                    // Accept button
                                     Button {
-                                        selectedBookingId = booking.id
-                                        showingAddNoteSheet = true
+                                        updateBookingStatus(id: booking.id, status: "confirmed")
                                     } label: {
-                                        Label("Add Note", systemImage: "square.and.pencil")
+                                        Label("Accept", systemImage: "checkmark")
                                     }
-                                    .tint(.orange)
+                                    .tint(.green)
+                                    
+                                    // Reject button
+                                    Button {
+                                        updateBookingStatus(id: booking.id, status: "cancelled")
+                                    } label: {
+                                        Label("Reject", systemImage: "xmark")
+                                    }
+                                    .tint(.red)
+                                } else if booking.status.lowercased() == "confirmed" {
+                                    // Complete button
+                                    Button {
+                                        updateBookingStatus(id: booking.id, status: "completed")
+                                    } label: {
+                                        Label("Complete", systemImage: "checkmark.circle")
+                                    }
+                                    .tint(.blue)
                                 }
+                            }
+                            .swipeActions(edge: .leading) {
+                                // Add note button
+                                Button {
+                                    selectedBookingId = booking.id
+                                    // Pre-populate with existing repairer notes if available
+                                    if let existingNotes = booking.repairer_note {
+                                        noteText = existingNotes
+                                    } else {
+                                        noteText = ""
+                                    }
+                                    showingAddNoteSheet = true
+                                } label: {
+                                    Label("Add Note", systemImage: "square.and.pencil")
+                                }
+                                .tint(.orange)
+                            }
                         }
                     }
                 }
@@ -186,10 +220,14 @@ struct RepairerHomeView: View {
             .padding()
             .navigationBarHidden(true)
             .sheet(isPresented: $showingAddNoteSheet) {
-                // Add note sheet
+                // Add repairer note sheet
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Add Note")
+                    Text(noteText.isEmpty ? "Add Repairer Note" : "Update Repairer Note")
                         .font(.headline)
+                    
+                    Text("Add your professional notes about this booking. These notes are only visible to you and other repairers.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                     
                     TextEditor(text: $noteText)
                         .frame(minHeight: 100)
@@ -207,7 +245,7 @@ struct RepairerHomeView: View {
                         
                         Button("Save") {
                             if let id = selectedBookingId, !noteText.isEmpty {
-                                addNote(id: id, note: noteText)
+                                addRepairerNote(id: id, note: noteText)
                             }
                             noteText = ""
                             showingAddNoteSheet = false
@@ -217,8 +255,31 @@ struct RepairerHomeView: View {
                 }
                 .padding()
             }
+            .background(
+                NavigationLink(
+                    destination: Group {
+                        if let booking = selectedBooking {
+                            ChatView(
+                                booking: booking,
+                                contactName: booking.customerName,
+                                isRepairer: true // Mark as repairer mode
+                            )
+                        }
+                    },
+                    isActive: $navigateToChat
+                ) {
+                    EmptyView()
+                }
+            )
+            .onChange(of: navigateToChat) { _, newValue in
+                print("navigateToChat changed to: \(newValue)")
+                if !newValue {
+                    print("Returned from chat view")
+                }
+            }
         }
         .onAppear {
+            print("RepairerHomeView appeared")
             loadBookings()
         }
     }
@@ -285,7 +346,7 @@ struct RepairerHomeView: View {
         }
     }
     
-    private func addNote(id: Int, note: String) {
+    private func addRepairerNote(id: Int, note: String) {
         isLoading = true
         
         bookingService.addRepairerBookingNote(id: id, note: note) { result in
@@ -297,7 +358,7 @@ struct RepairerHomeView: View {
                     // Reload bookings to get updated note
                     self.loadBookings()
                 case .failure(let error):
-                    self.errorMessage = "Failed to add note: \(error.localizedDescription)"
+                    self.errorMessage = "Failed to add repairer note: \(error.localizedDescription)"
                 }
             }
         }
@@ -306,30 +367,121 @@ struct RepairerHomeView: View {
 
 struct BookingRow: View {
     let booking: Booking
+    var onAddNote: () -> Void
+    var onOpenChat: () -> Void
+    var onRowTap: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Booking #\(booking.id)")
-                .font(.headline)
+        ZStack {
+            // This transparent background captures the row tap
+            Rectangle()
+                .fill(Color.clear)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    onRowTap()
+                }
             
-            Text("Status: \(booking.status)")
-                .font(.subheadline)
-                .foregroundColor(statusColor(booking.status))
-            
-            Text("Date: \(formatDate(booking.start_time))")
-                .font(.subheadline)
-            
-            Text("Address: \(booking.address)")
-                .font(.subheadline)
-            
-            if let notes = booking.notes, !notes.isEmpty {
-                Text("Notes: \(notes)")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .lineLimit(3)
+            // The actual row content
+            VStack(alignment: .leading, spacing: 8) {
+                // Add customer name
+                HStack {
+                    Text("Booking #\(booking.id)")
+                        .font(.headline)
+                    
+                    Spacer()
+                    
+                    // Status indicator
+                    Text(booking.status)
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(statusColor(booking.status))
+                        .cornerRadius(4)
+                }
+                
+                // Customer name - now using direct property from booking
+                Text("Customer: \(booking.customerName)")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
+                
+                Text("Date: \(formatDate(booking.start_time))")
+                    .font(.subheadline)
+                
+                Text("Address: \(booking.address)")
+                    .font(.subheadline)
+                
+                if let notes = booking.notes, !notes.isEmpty {
+                    Text("Customer Notes: \(notes)")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .lineLimit(3)
+                }
+                
+                if let repairerNote = booking.repairer_note, !repairerNote.isEmpty {
+                    Text("Your Notes: \(repairerNote)")
+                        .font(.caption)
+                        .foregroundColor(.green)
+                        .lineLimit(3)
+                }
+                
+                // Action buttons
+                HStack {
+                    Spacer()
+                    
+                    // Add Note Button
+                    Button(action: onAddNote) {
+                        Label("Repairer Notes", systemImage: "note.text")
+                            .font(.caption)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.orange.opacity(0.2))
+                            .foregroundColor(.orange)
+                            .cornerRadius(5)
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .allowsHitTesting(true)
+                    
+                    Spacer()
+                        .frame(width: 10)
+                    
+                    // Open Chat Button
+                    Button(action: {
+                        print("Chat button tapped for booking #\(booking.id)")
+                        onOpenChat()
+                    }) {
+                        Label("Chat", systemImage: "message")
+                            .font(.caption)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(Color.blue.opacity(0.2))
+                            .foregroundColor(.blue)
+                            .cornerRadius(5)
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .allowsHitTesting(true)
+                    
+                    Spacer()
+                }
+                .padding(.top, 5)
             }
+            .padding()
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.white, Color(.systemGray6)]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+            .cornerRadius(8)
+            .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            )
+            .padding(.horizontal)
+            .padding(.vertical, 4)
         }
-        .padding(.vertical, 8)
     }
     
     private func statusColor(_ status: String) -> Color {

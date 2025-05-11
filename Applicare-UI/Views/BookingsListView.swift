@@ -43,11 +43,11 @@ struct BookingsListView: View {
                     } else {
                         // Bookings list
                         ScrollView {
-                            LazyVStack(spacing: 16) {
+                            LazyVStack(spacing: 24) {
                                 ForEach(viewModel.bookings) { booking in
                                     NavigationLink(destination: SimpleChatView(
                                         booking: booking,
-                                        contactName: viewModel.repairerName(for: booking)
+                                        contactName: booking.customerName
                                     )) {
                                         BookingCardContent(
                                             booking: booking,
@@ -136,6 +136,11 @@ struct BookingCardContent: View {
                 .cornerRadius(12)
             }
             
+            // Add customer name directly from booking
+            Text("Customer: \(booking.customerName)")
+                .font(.subheadline)
+                .foregroundColor(.primary)
+            
             Divider()
             
             HStack(spacing: 20) {
@@ -184,18 +189,23 @@ struct BookingCardContent: View {
         .padding(16)
         .background(Color.white)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4)
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .stroke(Color.blue.opacity(0.2), lineWidth: 1)
         )
+        .padding(.bottom, 8)
+        .padding(.horizontal, 2)
     }
 }
 
 struct BookingsListView_Previews: PreviewProvider {
     static var previews: some View {
+        let viewModel = BookingsViewModel()
+        
         NavigationView {
             BookingsListView()
+                .environmentObject(viewModel)
         }
     }
 } 

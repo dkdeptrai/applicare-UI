@@ -9,6 +9,8 @@ import SwiftUI
 
 @main
 struct Applicare_UIApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     // Initialize view models with DI
     @StateObject private var authViewModel = AuthViewModel(
         authService: AuthNetworkService.shared,
@@ -69,6 +71,14 @@ struct Applicare_UIApp: App {
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        // Request notification permissions
+        NotificationManager.shared.requestAuthorization()
+        return true
     }
 }
 

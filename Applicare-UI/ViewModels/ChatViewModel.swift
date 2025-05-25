@@ -281,48 +281,26 @@ class ChatViewModel: ObservableObject, ChatMessageDelegate {
     // MARK: - ChatMessageDelegate
     
     func didReceiveMessage(_ message: Message, forBookingId: Int) {
-        print("⚠️ DEBUGGING DELEGATE CALLBACK ⚠️")
-        print("📥 ViewModel received message: id=\(message.id), content=\"\(message.content)\"")
-        print("📥 Current bookingId: \(String(describing: self.bookingId))")
-        print("📥 Message bookingId: \(bookingId)")
-        
-        guard forBookingId == self.bookingId else { 
-            print("📥 Ignored message for booking #\(forBookingId) (current: #\(self.bookingId ?? 0))")
-            return 
-        }
-        
-        print("📥 Message ACCEPTED - Handling in UI")
-        print("📥 Message details:")
-        print("  - Content: \"\(message.content)\"")
-        print("  - Sender: \(message.sender_type) (ID: \(message.sender_id))")
-        print("  - Name: \(message.displayName)")
-        print("  - Is from current user? \(message.isFromCurrentUser() ? "Yes" : "No")")
-        print("  - Created at: \(message.created_at)")
+        // Only process messages for the current booking
+        guard forBookingId == bookingId else { return }
         
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else {
-                print("❌ Self was deallocated before updating UI")
-                return
-            }
+            guard let self = self else { return }
             
-            // Check if message already exists
-            if let existingIndex = self.messages.firstIndex(where: { $0.id == message.id }) {
-                print("📥 Message already exists at index \(existingIndex), not adding duplicate")
-                return
-            }
-            
-            // Add the new message
-            print("📥 Adding new message to UI collection")
+            // Add the message to our array
             self.messages.append(message)
-            self.messages.sort(by: { $0.created_at < $1.created_at })
             
-            // Force view update through a dummy property change
-            let count = self.messages.count
+            // Force UI update
             self.objectWillChange.send()
-            print("📥 Updated messages array, now contains \(count) messages")
             
             // Call the callback with the new message count
+            let count = self.messages.count
             self.onMessagesUpdated?(count)
+            
+            // Schedule notification if app is in background
+            if UIApplication.shared.applicationState == .background {
+                NotificationManager.shared.scheduleMessageNotification(message: message)
+            }
         }
     }
     

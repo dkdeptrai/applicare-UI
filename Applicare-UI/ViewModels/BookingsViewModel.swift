@@ -29,13 +29,16 @@ class BookingsViewModel: ObservableObject {
                 switch result {
                 case .success(let bookings):
                     self?.bookings = bookings
+                    print("[DEBUG] Loaded bookings: \(bookings)")
                 case .failure(let error):
                     self?.errorMessage = "Failed to load bookings: \(error.localizedDescription)"
-                    print("Error loading bookings: \(error)")
+                    print("[DEBUG] Error loading bookings: \(error)")
                 }
             }
         }
     }
+    
+    var isEmpty: Bool { bookings.isEmpty }
     
     // Get repairer name - in a real app, you would fetch this from a proper source
     func repairerName(for booking: Booking) -> String {

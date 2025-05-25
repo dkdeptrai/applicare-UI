@@ -134,6 +134,36 @@
 		D02B94262DAAA54C00F7F503 /* Repair.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94252DAAA54C00F7F503 /* Repair.json */; };
 		D02B94272DAAA54C00F7F503 /* Plumber.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94242DAAA54C00F7F503 /* Plumber.json */; };
 		D02B94282DAAA54C00F7F503 /* Electrician.json in Resources */ = {isa = PBXBuildFile; fileRef = D02B94232DAAA54C00F7F503 /* Electrician.json */; };
+		D045FAE02DE30AD20060FFA7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FADF2DE30AD20060FFA7 /* NotificationManager.swift */; };
+		D045FAE12DE30AD20060FFA7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FADF2DE30AD20060FFA7 /* NotificationManager.swift */; };
+		D045FAE22DE30AD20060FFA7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FADF2DE30AD20060FFA7 /* NotificationManager.swift */; };
+		D045FAE42DE313070060FFA7 /* Appliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE32DE313070060FFA7 /* Appliance.swift */; };
+		D045FAE52DE313070060FFA7 /* Appliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE32DE313070060FFA7 /* Appliance.swift */; };
+		D045FAE62DE313070060FFA7 /* Appliance.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE32DE313070060FFA7 /* Appliance.swift */; };
+		D045FAE82DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE72DE313120060FFA7 /* ApplianceNetworkService.swift */; };
+		D045FAE92DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE72DE313120060FFA7 /* ApplianceNetworkService.swift */; };
+		D045FAEA2DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAE72DE313120060FFA7 /* ApplianceNetworkService.swift */; };
+		D045FAEC2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEB2DE3131F0060FFA7 /* ApplianceViewModel.swift */; };
+		D045FAED2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEB2DE3131F0060FFA7 /* ApplianceViewModel.swift */; };
+		D045FAEE2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEB2DE3131F0060FFA7 /* ApplianceViewModel.swift */; };
+		D045FAF02DE3132F0060FFA7 /* ApplianceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEF2DE3132F0060FFA7 /* ApplianceCard.swift */; };
+		D045FAF12DE3132F0060FFA7 /* ApplianceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEF2DE3132F0060FFA7 /* ApplianceCard.swift */; };
+		D045FAF22DE3132F0060FFA7 /* ApplianceCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAEF2DE3132F0060FFA7 /* ApplianceCard.swift */; };
+		D045FAF42DE318D70060FFA7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF32DE318D70060FFA7 /* MenuView.swift */; };
+		D045FAF52DE318D70060FFA7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF32DE318D70060FFA7 /* MenuView.swift */; };
+		D045FAF62DE318D70060FFA7 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF32DE318D70060FFA7 /* MenuView.swift */; };
+		D045FAF82DE330DD0060FFA7 /* BookingCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF72DE330DD0060FFA7 /* BookingCardContent.swift */; };
+		D045FAF92DE330DD0060FFA7 /* BookingCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF72DE330DD0060FFA7 /* BookingCardContent.swift */; };
+		D045FAFA2DE330DD0060FFA7 /* BookingCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAF72DE330DD0060FFA7 /* BookingCardContent.swift */; };
+		D045FAFC2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFB2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift */; };
+		D045FAFD2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFB2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift */; };
+		D045FAFE2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFB2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift */; };
+		D045FB002DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFF2DE353A70060FFA7 /* ApplianceDetailView.swift */; };
+		D045FB012DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFF2DE353A70060FFA7 /* ApplianceDetailView.swift */; };
+		D045FB022DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FAFF2DE353A70060FFA7 /* ApplianceDetailView.swift */; };
+		D045FB042DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FB032DE353AC0060FFA7 /* ApplianceNetworkService.swift */; };
+		D045FB052DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FB032DE353AC0060FFA7 /* ApplianceNetworkService.swift */; };
+		D045FB062DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045FB032DE353AC0060FFA7 /* ApplianceNetworkService.swift */; };
 		D04F9B262DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B252DD08510000A1C97 /* RepairerAuthViewModel.swift */; };
 		D04F9B272DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B252DD08510000A1C97 /* RepairerAuthViewModel.swift */; };
 		D04F9B282DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04F9B252DD08510000A1C97 /* RepairerAuthViewModel.swift */; };
@@ -264,6 +294,16 @@
 		D02B94232DAAA54C00F7F503 /* Electrician.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Electrician.json; sourceTree = "<group>"; };
 		D02B94242DAAA54C00F7F503 /* Plumber.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Plumber.json; sourceTree = "<group>"; };
 		D02B94252DAAA54C00F7F503 /* Repair.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Repair.json; sourceTree = "<group>"; };
+		D045FADF2DE30AD20060FFA7 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		D045FAE32DE313070060FFA7 /* Appliance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appliance.swift; sourceTree = "<group>"; };
+		D045FAE72DE313120060FFA7 /* ApplianceNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceNetworkService.swift; sourceTree = "<group>"; };
+		D045FAEB2DE3131F0060FFA7 /* ApplianceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceViewModel.swift; sourceTree = "<group>"; };
+		D045FAEF2DE3132F0060FFA7 /* ApplianceCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceCard.swift; sourceTree = "<group>"; };
+		D045FAF32DE318D70060FFA7 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		D045FAF72DE330DD0060FFA7 /* BookingCardContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingCardContent.swift; sourceTree = "<group>"; };
+		D045FAFB2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceDetailViewModel.swift; sourceTree = "<group>"; };
+		D045FAFF2DE353A70060FFA7 /* ApplianceDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceDetailView.swift; sourceTree = "<group>"; };
+		D045FB032DE353AC0060FFA7 /* ApplianceNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplianceNetworkService.swift; sourceTree = "<group>"; };
 		D04F9B252DD08510000A1C97 /* RepairerAuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerAuthViewModel.swift; sourceTree = "<group>"; };
 		D04F9B292DD08533000A1C97 /* RepairerSignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerSignInView.swift; sourceTree = "<group>"; };
 		D04F9B2D2DD08540000A1C97 /* RepairerSignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepairerSignUpView.swift; sourceTree = "<group>"; };
@@ -334,7 +374,9 @@
 				D014F2872DAA9BD200AA4623 /* CustomTextField.swift */,
 				D014F2882DAA9BD200AA4623 /* SocialButton.swift */,
 				D021F7A82DC7A9E10035DDE1 /* ChatButton.swift */,
+				D045FAF72DE330DD0060FFA7 /* BookingCardContent.swift */,
 				D04F9B452DD0B48B000A1C97 /* RepairerChatButton.swift */,
+				D045FAEF2DE3132F0060FFA7 /* ApplianceCard.swift */,
 				D021F7A92DC7A9E10035DDE1 /* MessageBubble.swift */,
 			);
 			path = Components;
@@ -343,6 +385,7 @@
 		D014F28E2DAA9BD200AA4623 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D045FAE32DE313070060FFA7 /* Appliance.swift */,
 				D014F28A2DAA9BD200AA4623 /* AuthDTOs.swift */,
 				D014F28B2DAA9BD200AA4623 /* OnboardingState.swift */,
 				D014F28D2DAA9BD200AA4623 /* UserDTO.swift */,
@@ -371,7 +414,9 @@
 				D014F2922DAA9BD200AA4623 /* APIEndpointProtocol.swift */,
 				D014F2932DAA9BD200AA4623 /* AuthNetworkService.swift */,
 				D021F7C02DC7AF180035DDE1 /* BookingNetworkService.swift */,
+				D045FB032DE353AC0060FFA7 /* ApplianceNetworkService.swift */,
 				D014F2942DAA9BD200AA4623 /* BaseNetworkService.swift */,
+				D045FAE72DE313120060FFA7 /* ApplianceNetworkService.swift */,
 				D014F2952DAA9BD200AA4623 /* NetworkError.swift */,
 				D014F2962DAA9BD200AA4623 /* NetworkServiceProtocol.swift */,
 				D014F2972DAA9BD200AA4623 /* UserNetworkService.swift */,
@@ -385,6 +430,7 @@
 			children = (
 				D014F2982DAA9BD200AA4623 /* Networking */,
 				D04F9B392DD09F6A000A1C97 /* UserCacheService.swift */,
+				D045FADF2DE30AD20060FFA7 /* NotificationManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -395,6 +441,8 @@
 				D014F29A2DAA9BD200AA4623 /* AuthViewModel.swift */,
 				D014F29B2DAA9BD200AA4623 /* OnboardingViewModel.swift */,
 				D04F9B252DD08510000A1C97 /* RepairerAuthViewModel.swift */,
+				D045FAEB2DE3131F0060FFA7 /* ApplianceViewModel.swift */,
+				D045FAFB2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift */,
 				D014F29C2DAA9BD200AA4623 /* UserViewModel.swift */,
 				D021F7B42DC7AE4A0035DDE1 /* BookingsViewModel.swift */,
 				D021F7A42DC7A9AF0035DDE1 /* ChatViewModel.swift */,
@@ -412,7 +460,9 @@
 				D05BC6842DAD6CC100AB5DB4 /* CompleteInfoView.swift */,
 				D07FF4C82DC7B6F9001EFBDF /* SimpleChatView.swift */,
 				D021F7B82DC7AE5E0035DDE1 /* BookingsListView.swift */,
+				D045FAFF2DE353A70060FFA7 /* ApplianceDetailView.swift */,
 				D014F2A02DAA9BD200AA4623 /* HomeView.swift */,
+				D045FAF32DE318D70060FFA7 /* MenuView.swift */,
 				D04F9B292DD08533000A1C97 /* RepairerSignInView.swift */,
 				D014F2A12DAA9BD200AA4623 /* LogoView.swift */,
 				D04F9B2D2DD08540000A1C97 /* RepairerSignUpView.swift */,
@@ -805,6 +855,8 @@
 				D04F9B332DD0854E000A1C97 /* RepairerProfileView.swift in Sources */,
 				D021F7972DC7A94C0035DDE1 /* MessageDTOs.swift in Sources */,
 				D014F2F72DAA9BD200AA4623 /* SignUpView.swift in Sources */,
+				D045FAFC2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */,
+				D045FAE52DE313070060FFA7 /* Appliance.swift in Sources */,
 				D014F2F82DAA9BD200AA4623 /* BaseNetworkService.swift in Sources */,
 				D021F7BA2DC7AE5E0035DDE1 /* BookingsListView.swift in Sources */,
 				D021F7BE2DC7AE960035DDE1 /* EnhancedChatView.swift in Sources */,
@@ -820,12 +872,16 @@
 				D04F9B3A2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2FA2DAA9BD200AA4623 /* UserNetworkService.swift in Sources */,
 				D014F2FB2DAA9BD200AA4623 /* CustomTextField.swift in Sources */,
+				D045FAF52DE318D70060FFA7 /* MenuView.swift in Sources */,
 				D014F2FF2DAA9BD200AA4623 /* AnimatedImageView.swift in Sources */,
 				D014F3002DAA9BD200AA4623 /* NetworkError.swift in Sources */,
 				D014F3012DAA9BD200AA4623 /* ContentView.swift in Sources */,
 				D014F3022DAA9BD200AA4623 /* SocialLoginView.swift in Sources */,
+				D045FAF82DE330DD0060FFA7 /* BookingCardContent.swift in Sources */,
+				D045FAEA2DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D014F3032DAA9BD200AA4623 /* APIEndpointProtocol.swift in Sources */,
 				D014F3042DAA9BD200AA4623 /* APIEndpoint.swift in Sources */,
+				D045FAEE2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */,
 				D04F9B462DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
 				D014F3052DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
 				D04F9B262DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
@@ -843,13 +899,17 @@
 				D021F7AD2DC7A9E10035DDE1 /* ChatButton.swift in Sources */,
 				D0A21B262DAC058700414398 /* RepairerBookingView.swift in Sources */,
 				D0A21B352DAC072C00414398 /* RepairerBookingView.swift in Sources */,
+				D045FAE22DE30AD20060FFA7 /* NotificationManager.swift in Sources */,
 				D014F30B2DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F30C2DAA9BD200AA4623 /* LogoView.swift in Sources */,
 				D014F30D2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D014F30E2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
 				D021F7B22DC7AA000035DDE1 /* ChatView.swift in Sources */,
 				D014F3102DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
+				D045FB022DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */,
+				D045FB062DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D05BC6922DAD711400AB5DB4 /* InfoRow.swift in Sources */,
+				D045FAF02DE3132F0060FFA7 /* ApplianceCard.swift in Sources */,
 				D04F9B3E2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F3112DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D021F7C22DC7AF180035DDE1 /* BookingNetworkService.swift in Sources */,
@@ -867,6 +927,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045FB042DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D04F9B2C2DD08533000A1C97 /* RepairerSignInView.swift in Sources */,
 				D021F7942DC7A94C0035DDE1 /* Message.swift in Sources */,
 				D021F7952DC7A94C0035DDE1 /* MessageDTOs.swift in Sources */,
@@ -892,7 +953,9 @@
 				D05BC6962DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */,
 				D021F7B62DC7AE4A0035DDE1 /* BookingsViewModel.swift in Sources */,
 				D021F7BB2DC7AE5E0035DDE1 /* BookingsListView.swift in Sources */,
+				D045FAF62DE318D70060FFA7 /* MenuView.swift in Sources */,
 				D014F2C52DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
+				D045FAE82DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D04F9B322DD0854E000A1C97 /* RepairerProfileView.swift in Sources */,
 				D014F2C62DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
 				D021F7AA2DC7A9E10035DDE1 /* MessageBubble.swift in Sources */,
@@ -904,15 +967,22 @@
 				D014F2C92DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2CB2DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2CC2DAA9BD200AA4623 /* LogoView.swift in Sources */,
+				D045FAE02DE30AD20060FFA7 /* NotificationManager.swift in Sources */,
 				D04F9B3C2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2CD2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D04F9B472DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
+				D045FAFD2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */,
 				D014F2CE2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
+				D045FAFA2DE330DD0060FFA7 /* BookingCardContent.swift in Sources */,
 				D014F2D02DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2D12DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D07FF4C92DC7B6F9001EFBDF /* SimpleChatView.swift in Sources */,
+				D045FAEC2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */,
+				D045FB012DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */,
 				D04F9B402DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F2D22DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
+				D045FAF22DE3132F0060FFA7 /* ApplianceCard.swift in Sources */,
+				D045FAE62DE313070060FFA7 /* Appliance.swift in Sources */,
 				D04F9B272DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
 				D014F2D32DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
 				D014F2D42DAA9BD200AA4623 /* UserDTO.swift in Sources */,
@@ -928,6 +998,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045FB052DE353AC0060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D04F9B2B2DD08533000A1C97 /* RepairerSignInView.swift in Sources */,
 				D021F7922DC7A94C0035DDE1 /* Message.swift in Sources */,
 				D021F7932DC7A94C0035DDE1 /* MessageDTOs.swift in Sources */,
@@ -953,7 +1024,9 @@
 				D05BC6982DAD773A00AB5DB4 /* RepairerProfileView.swift in Sources */,
 				D021F7B72DC7AE4A0035DDE1 /* BookingsViewModel.swift in Sources */,
 				D021F7B92DC7AE5E0035DDE1 /* BookingsListView.swift in Sources */,
+				D045FAF42DE318D70060FFA7 /* MenuView.swift in Sources */,
 				D014F2E32DAA9BD200AA4623 /* UserViewModel.swift in Sources */,
+				D045FAE92DE313120060FFA7 /* ApplianceNetworkService.swift in Sources */,
 				D04F9B342DD0854E000A1C97 /* RepairerProfileView.swift in Sources */,
 				D014F2E42DAA9BD200AA4623 /* OnboardingState.swift in Sources */,
 				D021F7AE2DC7A9E10035DDE1 /* MessageBubble.swift in Sources */,
@@ -965,15 +1038,22 @@
 				D014F2E72DAA9BD200AA4623 /* AuthViewModel.swift in Sources */,
 				D014F2E92DAA9BD200AA4623 /* SignInView.swift in Sources */,
 				D014F2EA2DAA9BD200AA4623 /* LogoView.swift in Sources */,
+				D045FAE12DE30AD20060FFA7 /* NotificationManager.swift in Sources */,
 				D04F9B3B2DD09F6A000A1C97 /* UserCacheService.swift in Sources */,
 				D014F2EB2DAA9BD200AA4623 /* HomeView.swift in Sources */,
 				D04F9B482DD0B48B000A1C97 /* RepairerChatButton.swift in Sources */,
+				D045FAFE2DE3539F0060FFA7 /* ApplianceDetailViewModel.swift in Sources */,
 				D014F2EC2DAA9BD200AA4623 /* AuthDTOs.swift in Sources */,
+				D045FAF92DE330DD0060FFA7 /* BookingCardContent.swift in Sources */,
 				D014F2EE2DAA9BD200AA4623 /* Applicare_UIApp.swift in Sources */,
 				D014F2EF2DAA9BD200AA4623 /* OnboardingView.swift in Sources */,
 				D07FF4CA2DC7B6F9001EFBDF /* SimpleChatView.swift in Sources */,
+				D045FAED2DE3131F0060FFA7 /* ApplianceViewModel.swift in Sources */,
+				D045FB002DE353A70060FFA7 /* ApplianceDetailView.swift in Sources */,
 				D04F9B3F2DD0ADE9000A1C97 /* RepairerChatView.swift in Sources */,
 				D014F2F02DAA9BD200AA4623 /* OnboardingViewModel.swift in Sources */,
+				D045FAF12DE3132F0060FFA7 /* ApplianceCard.swift in Sources */,
+				D045FAE42DE313070060FFA7 /* Appliance.swift in Sources */,
 				D04F9B282DD08510000A1C97 /* RepairerAuthViewModel.swift in Sources */,
 				D014F2F12DAA9BD200AA4623 /* CheckboxToggleStyle.swift in Sources */,
 				D014F2F22DAA9BD200AA4623 /* UserDTO.swift in Sources */,
